@@ -1,7 +1,3 @@
----
-title: overambitious dev blog
----
-
 # a clear shortcut
 
 When sharing terminal screens in video conferencing, I often see
