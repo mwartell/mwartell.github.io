@@ -1,7 +1,6 @@
 ---
 title: making python packages the modern way
 categories: tools packaging
-layout: post
 ---
 
 I've not found a place where this is described clearly. You have to make a Python **package** and then you can import that directly by name.

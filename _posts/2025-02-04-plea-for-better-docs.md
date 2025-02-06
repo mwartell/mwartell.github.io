@@ -1,5 +1,4 @@
 ---
-layout: post
 title: a plea for better developmer documentation
 category: docs
 ---
