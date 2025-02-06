@@ -1,5 +1,6 @@
 ---
 title: a plea for better developmer documentation
+category: docs
 ---
 
 This notion has been in my head for years, but seeing the instructions for
