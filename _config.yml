@@ -19,9 +19,9 @@ locale                   : "en-US"
 rtl                      : # true, false (default) # turns direction of the page into right to left for RTL languages
 title                    : "flotsam and…"
 title_separator          : "-"
-subtitle                 : "a developers weblog by matt wartell"
+subtitle                 : "a developer's weblog"
 name                     : "mwartell"
-description              : "a developers weblog"
+description              : "a developer's weblog by matt wartell"
 url                      : "https://mwartell.github.io" # the base hostname & protocol for your site
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -94,12 +94,12 @@ author:
   location         : "herndon.va.us"
   email            :
   links:
-    - label: "LinkedIn"
-      icon: "fab fa-fw fa-linkedin"
-      url: "https://www.linkedin.com/in/matt-wartell"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/mwartell"
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/matt-wartell"
 
 # # Site Footer
 # footer:
@@ -185,7 +185,7 @@ kramdown:
 # Sass/SCSS
 sass:
   sass_dir: _sass
-  style: compressed # https://sass-lang.com/documentation/file.SASS_REFERENCE.html#output_style
+  style: expanded # https://sass-lang.com/documentation/file.SASS_REFERENCE.html#output_style
 
 
 # Outputting
