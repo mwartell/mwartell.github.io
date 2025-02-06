@@ -2,7 +2,8 @@
 title: a clear shortcut
 layout: post
 category: tools
----
+image: assets/images/clean-window.png
+
 
 When sharing terminal screens in video conferencing, I often see
 people typing

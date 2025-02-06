@@ -26,10 +26,13 @@ url: "https://mwartell.github.io"
 github_username:  mwartell
 # email: your-email@example.com
 
+markdown: GFM
+
 # Build settings
-theme: minima
+remote_theme: "mmistakes/minimal-mistakes@4.26.2"
 plugins:
   - jekyll-feed
+  - jekyll-include-cache
 
 # Exclude from processing.
 # The following items will not be processed, by default.
