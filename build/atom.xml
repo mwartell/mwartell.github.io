@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>mwartell maladies</title><link href="https://mwartell.github.io/" rel="alternate"></link><link href="https://mwartell.github.io/atom.xml" rel="self"></link><id>https://mwartell.github.io/</id><updated>2025-01-29T00:00:00-05:00</updated><subtitle>the fourth most influential blog in the galaxy…</subtitle><entry><title>making python packages the modern way</title><link href="https://mwartell.github.io/modern-python-packages.html" rel="alternate"></link><published>2025-01-29T00:00:00-05:00</published><updated>2025-01-29T00:00:00-05:00</updated><author><name>matt wartell</name></author><id>tag:mwartell.github.io,2025-01-29:/modern-python-packages.html</id><summary type="html">making python packages the modern way</summary><content type="html">&lt;p&gt;I&amp;rsquo;ve not found a place where this is described clearly. You have to make a Python
+&lt;strong&gt;package&lt;/strong&gt; and then you can import that directly by name.&lt;/p&gt;
+&lt;p&gt;The command &lt;code&gt;uv init --package octavius&lt;/code&gt; will create a package structure containing&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;octavius/
+├── pyproject.toml
+└── src
+    └── octavius
+        └── __init__.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Then, if you &lt;code&gt;cd octavius&lt;/code&gt; and &lt;code&gt;uv sync&lt;/code&gt; the package &lt;code&gt;octavius&lt;/code&gt; will be installed into
+your virtualenv.&lt;/p&gt;
+&lt;p&gt;You have created a package octavius and you can import it directly in your notebooks like:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;octavius&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, if I create &lt;code&gt;octavius/toys.py&lt;/code&gt; with a function &lt;code&gt;lego&lt;/code&gt; in it. I could then&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;octavius&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;toys&lt;/span&gt;
+&lt;span class="n"&gt;toys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lego&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;or similar.&lt;/p&gt;
+&lt;p&gt;To create a submodule in &lt;code&gt;octavius/friends&lt;/code&gt; just create the directory and put an empty
+&lt;code&gt;__init__.py&lt;/code&gt; to mark it as a module. Then, with &lt;code&gt;octavius/friends/mary.py&lt;/code&gt; you could
+import that with&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;octavius.friends&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;mary&lt;/span&gt;
+&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;mary.&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;hobbies&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="si"&gt;=}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;a big caution&lt;/h2&gt;
+&lt;p&gt;If you are missing a build system in your &lt;code&gt;pyproject.toml&lt;/code&gt; you will not be able to
+import your package. Unfortunately, &lt;code&gt;uv&lt;/code&gt; gives no indication that anything is wrong, you
+will just get an &lt;code&gt;ImportError&lt;/code&gt; when you try to import your package.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;[build-system]&lt;/span&gt;
+&lt;span class="na"&gt;requires&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;[&amp;quot;hatchling&amp;quot;]&lt;/span&gt;
+&lt;span class="na"&gt;build-backend&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;hatchling.build&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You can confirm that &lt;code&gt;uv&lt;/code&gt; has installed your package with&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv pip list | grep octavius
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></entry><entry><title>a plea for better developmer documentation</title><link href="https://mwartell.github.io/plea-for-better-docs.html" rel="alternate"></link><published>2024-12-04T00:00:00-05:00</published><updated>2024-12-04T00:00:00-05:00</updated><author><name>matt wartell</name></author><id>tag:mwartell.github.io,2024-12-04:/plea-for-better-docs.html</id><summary type="html">a plea for better developmer documentation</summary><content type="html">&lt;p&gt;This notion has been in my head for years, but seeing the instructions for
+Installing &lt;a href="https://www.rust-lang.org/tools/install"&gt;Rust&lt;/a&gt; on Linix made me
+want to write this down.&lt;/p&gt;
+&lt;p&gt;The cut-and-paste instructions are&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;curl --proto &amp;#39;=https&amp;#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now &lt;code&gt;curl https://some.site/some.sh | sh&lt;/code&gt; is mildly spooky on its own,
+running a script from the internet. But, the Rust team has a good reputation
+and we can assume that the script is safe. But then why the additional
+flags on curl? What do they do? Why are they there? Do I need them?&lt;/p&gt;
+&lt;p&gt;The page gives no explanation. It just says &amp;ldquo;run this command&amp;rdquo; and leaves it
+at that. This is endemic in developer documentation.&lt;/p&gt;
+&lt;h2&gt;curl options&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--proto '=https'&lt;/code&gt; - According to the man page the option &amp;ldquo;allows scripts to safely
+  rely on being able to disable potentially dangerous protocols, without relying upon
+  support for that protocol being built into curl to avoid an error. to only use the
+  https protocol.&amp;rdquo; In the case of rust install command, this means that curl will
+  complain if the URL &lt;code&gt;https://sh.rustup.rs&lt;/code&gt; doesn&amp;rsquo;t begin with &lt;code&gt;https:&lt;/code&gt;. Since
+  we know exactly what the URL is, this is wholly unnecessary&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;TODO: I&amp;rsquo;m still working on this post. I have a lot more to say about this topic.&lt;/p&gt;
+&lt;h2&gt;how this got to be this way&lt;/h2&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;stateDiagram&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;direction&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;LR&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;--&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;--&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;--&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;state&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="n"&gt;direction&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;LR&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;--&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;--&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;D&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></entry><entry><title>a clear shortcut</title><link href="https://mwartell.github.io/a-clear-shortcut.html" rel="alternate"></link><published>2021-09-21T00:00:00-04:00</published><updated>2021-09-21T00:00:00-04:00</updated><author><name>matt wartell</name></author><id>tag:mwartell.github.io,2021-09-21:/a-clear-shortcut.html</id><summary type="html">a clear shortcut</summary><content type="html">&lt;p&gt;When sharing terminal screens in video conferencing, I often see
+people typing&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;clear
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;in the shell to clear the screen. There is a better way.&lt;/p&gt;
+&lt;p&gt;Since as long as I can remember, possibly dating back to the
+advent of GNU Bash and its &lt;a href="https://en.wikipedia.org/wiki/GNU_Readline"&gt;readline&lt;/a&gt; line editor, Ctrl-L
+has been present to clear the screen. To use it, press&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;Ctrl-L
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;or, on macOS, I guess,&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;⌘-L
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;that&amp;rsquo;s the Control or Command key along with the letter L.&lt;/p&gt;
+&lt;p&gt;The historically minded will remember that Ctrl-L is the ␌
+ASCII form-feed character that would eject a page when sent
+to a Teletype.&lt;/p&gt;</content></entry></feed>

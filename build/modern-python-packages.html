@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="author" content="matt wartell">
+    <meta name="description" content="the fourth most influential blog in the galaxy…">
+    <link rel="alternate" href="/atom.xml" type="application/atom+xml">
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&family=Enriqueta&family=Lato&display=swap" rel="stylesheet">
+    <title>making python packages the modern way | the fourth most influential blog in the galaxy…</title>
+  </head>
+
+  <body>
+    <header>
+      <h1><a href="/">mwartell maladies</a></h1>
+      <nav>
+        <h2>the fourth most influential blog in the galaxy…</h2>
+        <ul>
+          <li><h2><a href="/">Blog</a></h2></li>
+          <!-- <li><h2><a href="/archive.html">Archive</a></h2></li> -->
+          <li><h2><a href="/tags/">Tags</a></h2></li>
+          <li><h2><a href="/about.html">About Me</a></h2></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+    
+
+  
+  <h2>making python packages the modern way</h2>
+  
+
+  <aside>
+    <p>published on 2025-01-29
+
+    
+    · tagged with
+      
+        <a href="/tags/python packaging.html">#python packaging</a>
+    
+    </p>
+  </aside>
+
+  <p>I&rsquo;ve not found a place where this is described clearly. You have to make a Python
+<strong>package</strong> and then you can import that directly by name.</p>
+<p>The command <code>uv init --package octavius</code> will create a package structure containing</p>
+<div class="codehilite"><pre><span></span><code>octavius/
+├── pyproject.toml
+└── src
+    └── octavius
+        └── __init__.py
+</code></pre></div>
+
+<p>Then, if you <code>cd octavius</code> and <code>uv sync</code> the package <code>octavius</code> will be installed into
+your virtualenv.</p>
+<p>You have created a package octavius and you can import it directly in your notebooks like:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">octavius</span>
+</code></pre></div>
+
+<p>Now, if I create <code>octavius/toys.py</code> with a function <code>lego</code> in it. I could then</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">octavius</span><span class="w"> </span><span class="kn">import</span> <span class="n">toys</span>
+<span class="n">toys</span><span class="o">.</span><span class="n">lego</span><span class="p">()</span>
+</code></pre></div>
+
+<p>or similar.</p>
+<p>To create a submodule in <code>octavius/friends</code> just create the directory and put an empty
+<code>__init__.py</code> to mark it as a module. Then, with <code>octavius/friends/mary.py</code> you could
+import that with</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">octavius.friends</span><span class="w"> </span><span class="kn">import</span> <span class="n">mary</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mary.</span><span class="si">{</span><span class="n">hobbies</span><span class="p">()</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>a big caution</h2>
+<p>If you are missing a build system in your <code>pyproject.toml</code> you will not be able to
+import your package. Unfortunately, <code>uv</code> gives no indication that anything is wrong, you
+will just get an <code>ImportError</code> when you try to import your package.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">[build-system]</span>
+<span class="na">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">[&quot;hatchling&quot;]</span>
+<span class="na">build-backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;hatchling.build&quot;</span>
+</code></pre></div>
+
+<p>You can confirm that <code>uv</code> has installed your package with</p>
+<div class="codehilite"><pre><span></span><code>uv pip list | grep octavius
+</code></pre></div>
+
+
+    </main>
+
+    <footer>
+
+      <p></p>contact me via
+        <a rel="me" href="https://github.com/mwartell">GitHub/mwartell</a>
+        <a href="mailto:matt.wartell@gmail.com">matt.wartell@gmail.com</a>
+        <a href="https:/linkedin.com/in/mattwartell">LinkedIn:mattwartell</a>
+      </p>
+      <p>this website was built with <a href="https://github.com/venthur/blag">blag</a>.</p>
+    </footer>
+  </body>
+
+</html>

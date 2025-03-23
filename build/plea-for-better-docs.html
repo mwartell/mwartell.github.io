@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="author" content="matt wartell">
+    <meta name="description" content="the fourth most influential blog in the galaxy…">
+    <link rel="alternate" href="/atom.xml" type="application/atom+xml">
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&family=Enriqueta&family=Lato&display=swap" rel="stylesheet">
+    <title>a plea for better developmer documentation | the fourth most influential blog in the galaxy…</title>
+  </head>
+
+  <body>
+    <header>
+      <h1><a href="/">mwartell maladies</a></h1>
+      <nav>
+        <h2>the fourth most influential blog in the galaxy…</h2>
+        <ul>
+          <li><h2><a href="/">Blog</a></h2></li>
+          <!-- <li><h2><a href="/archive.html">Archive</a></h2></li> -->
+          <li><h2><a href="/tags/">Tags</a></h2></li>
+          <li><h2><a href="/about.html">About Me</a></h2></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+    
+
+  
+  <h2>a plea for better developmer documentation</h2>
+  
+
+  <aside>
+    <p>published on 2024-12-04
+
+    
+    </p>
+  </aside>
+
+  <p>This notion has been in my head for years, but seeing the instructions for
+Installing <a href="https://www.rust-lang.org/tools/install">Rust</a> on Linix made me
+want to write this down.</p>
+<p>The cut-and-paste instructions are</p>
+<div class="codehilite"><pre><span></span><code>curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</code></pre></div>
+
+<p>Now <code>curl https://some.site/some.sh | sh</code> is mildly spooky on its own,
+running a script from the internet. But, the Rust team has a good reputation
+and we can assume that the script is safe. But then why the additional
+flags on curl? What do they do? Why are they there? Do I need them?</p>
+<p>The page gives no explanation. It just says &ldquo;run this command&rdquo; and leaves it
+at that. This is endemic in developer documentation.</p>
+<h2>curl options</h2>
+<ul>
+<li><code>--proto '=https'</code> - According to the man page the option &ldquo;allows scripts to safely
+  rely on being able to disable potentially dangerous protocols, without relying upon
+  support for that protocol being built into curl to avoid an error. to only use the
+  https protocol.&rdquo; In the case of rust install command, this means that curl will
+  complain if the URL <code>https://sh.rustup.rs</code> doesn&rsquo;t begin with <code>https:</code>. Since
+  we know exactly what the URL is, this is wholly unnecessary</li>
+</ul>
+<p>TODO: I&rsquo;m still working on this post. I have a lot more to say about this topic.</p>
+<h2>how this got to be this way</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">stateDiagram</span>
+<span class="w">    </span><span class="n">direction</span><span class="w"> </span><span class="n">LR</span>
+<span class="w">    </span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">A</span>
+<span class="w">    </span><span class="n">A</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">B</span>
+<span class="w">    </span><span class="n">B</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">C</span>
+<span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">direction</span><span class="w"> </span><span class="n">LR</span>
+<span class="w">      </span><span class="n">a</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">b</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">B</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">D</span>
+</code></pre></div>
+
+
+    </main>
+
+    <footer>
+
+      <p></p>contact me via
+        <a rel="me" href="https://github.com/mwartell">GitHub/mwartell</a>
+        <a href="mailto:matt.wartell@gmail.com">matt.wartell@gmail.com</a>
+        <a href="https:/linkedin.com/in/mattwartell">LinkedIn:mattwartell</a>
+      </p>
+      <p>this website was built with <a href="https://github.com/venthur/blag">blag</a>.</p>
+    </footer>
+  </body>
+
+</html>
