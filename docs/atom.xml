@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>mwartell maladies</title><link href="https://mwartell.github.io/" rel="alternate"></link><link href="https://mwartell.github.io/atom.xml" rel="self"></link><id>https://mwartell.github.io/</id><updated>2025-03-23T00:00:00-04:00</updated><subtitle>the fourth most influential blog in the galaxy…</subtitle><entry><title>in praise of blag</title><link href="https://mwartell.github.io/in-praise-of-blag.html" rel="alternate"></link><published>2025-03-23T00:00:00-04:00</published><updated>2025-03-23T00:00:00-04:00</updated><author><name>matt wartell</name></author><id>tag:mwartell.github.io,2025-03-23:/in-praise-of-blag.html</id><summary type="html">in praise of blag</summary><content type="html">&lt;p&gt;At the strong recommendation of GitHub&lt;/p&gt;</content></entry><entry><title>making python packages the modern way</title><link href="https://mwartell.github.io/modern-python-packages.html" rel="alternate"></link><published>2025-01-29T00:00:00-05:00</published><updated>2025-01-29T00:00:00-05:00</updated><author><name>matt wartell</name></author><id>tag:mwartell.github.io,2025-01-29:/modern-python-packages.html</id><summary type="html">making python packages the modern way</summary><content type="html">&lt;p&gt;I&amp;rsquo;ve not found a place where this is described clearly. You have to make a Python
-&lt;strong&gt;package&lt;/strong&gt; and then you can import that directly by name.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>mwartell maladies</title><link href="https://mwartell.github.io/" rel="alternate"></link><link href="https://mwartell.github.io/atom.xml" rel="self"></link><id>https://mwartell.github.io/</id><updated>2025-01-29T00:00:00-05:00</updated><subtitle>the fourth most influential blog in the galaxy…</subtitle><entry><title>making python packages the modern way</title><link href="https://mwartell.github.io/modern-python-packages.html" rel="alternate"></link><published>2025-01-29T00:00:00-05:00</published><updated>2025-01-29T00:00:00-05:00</updated><author><name>matt wartell</name></author><id>tag:mwartell.github.io,2025-01-29:/modern-python-packages.html</id><summary type="html">making python packages the modern way</summary><content type="html">&lt;p&gt;Although the [uv package and project management tool][uv] has been taking the Python
+community by storm, I&amp;rsquo;ve found its documentation to be annoying incomplete. This
+is the first in a series of notes that I&amp;rsquo;m writing to address some places of chronic
+misunderstandings I&amp;rsquo;ve seen in the community.&lt;/p&gt;
+&lt;p&gt;The first of these is how to handle imports within the package being written under
+uv. I&amp;rsquo;ve not found a place where this is described clearly and adds to the longstanding
+Python problems of getting relative imports correct.&lt;/p&gt;
+&lt;p&gt;If you are developing a Python package to be used by others you have to make a Python
+&lt;strong&gt;package&lt;/strong&gt; and then you can import that directly by name. In practice, I&amp;rsquo;ve found
+it worthwhile to start every project as a package because the little extra mechanism
+added at the start makes later distribution effortless.&lt;/p&gt;
 &lt;p&gt;The command &lt;code&gt;uv init --package octavius&lt;/code&gt; will create a package structure containing&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;octavius/
 ├── pyproject.toml
@@ -28,7 +37,7 @@ import that with&lt;/p&gt;
 &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;mary.&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;hobbies&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="si"&gt;=}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;h2&gt;a big caution&lt;/h2&gt;
+&lt;h2&gt;a big gotcha&lt;/h2&gt;
 &lt;p&gt;If you are missing a build system in your &lt;code&gt;pyproject.toml&lt;/code&gt; you will not be able to
 import your package. Unfortunately, &lt;code&gt;uv&lt;/code&gt; gives no indication that anything is wrong, you
 will just get an &lt;code&gt;ImportError&lt;/code&gt; when you try to import your package.&lt;/p&gt;
