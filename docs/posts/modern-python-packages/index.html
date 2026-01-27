@@ -1,33 +1,111 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="matt wartell"><meta name=description content="the fourth most influential blog in the galaxy…"><link rel=alternate href=/atom.xml type=application/atom+xml><link rel=stylesheet href=/style.css type=text/css><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&family=Enriqueta&family=Lato&display=swap" rel=stylesheet><title>making python packages the modern way | the fourth most influential blog in the galaxy…</title></head><body><header><h1><a href=/>mwartell maladies</a></h1><nav><h2>the fourth most influential blog in the galaxy…</h2><ul><li><h2><a href=/>Blog</a></h2></li><li><h2><a href=/tags/>Tags</a></h2></li><li><h2><a href=/about.html>About Me</a></h2></li></ul></nav></header><main><h2>making python packages the modern way</h2><aside><p>published on 2025-01-29
-· tagged with
-<a href=/tags/python-packaging/>#python packaging</a></p></aside><p>Although the [uv package and project management tool][uv] has been taking the Python
+<!DOCTYPE html>
+<html lang="en">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8220&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="author" content="matt wartell">
+    <meta name="description" content="the fourth most influential blog in the galaxy…">
+    <link rel="alternate" href="/atom.xml" type="application/atom+xml">
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&family=Enriqueta&family=Lato&display=swap" rel="stylesheet">
+    <title>making python packages the modern way | the fourth most influential blog in the galaxy…</title>
+  </head>
+
+  <body>
+    <header>
+      <h1><a href="/">mwartell maladies</a></h1>
+      <nav>
+        <h2>the fourth most influential blog in the galaxy…</h2>
+        <ul>
+          <li><h2><a href="/">Blog</a></h2></li>
+          
+          <li><h2><a href="/tags/">Tags</a></h2></li>
+          <li><h2><a href="/about.html">About Me</a></h2></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+    
+
+  
+  <h2>making python packages the modern way</h2>
+  
+
+  <aside>
+    <p>published on 2025-01-29
+
+    
+    · tagged with
+      
+      
+        <a href="/tags/python-packaging/">#python packaging</a>
+    
+    </p>
+  </aside>
+
+  <p>Although the [uv package and project management tool][uv] has been taking the Python
 community by storm, I&rsquo;ve found its documentation to be annoying incomplete. This
 is the first in a series of notes that I&rsquo;m writing to address some places of chronic
-misunderstandings I&rsquo;ve seen in the community.</p><p>The first of these is how to handle imports within the package being written under
+misunderstandings I&rsquo;ve seen in the community.</p>
+<p>The first of these is how to handle imports within the package being written under
 uv. I&rsquo;ve not found a place where this is described clearly and adds to the longstanding
-Python problems of getting relative imports correct.</p><p>If you are developing a Python package to be used by others you have to make a Python
+Python problems of getting relative imports correct.</p>
+<p>If you are developing a Python package to be used by others you have to make a Python
 <strong>package</strong> and then you can import that directly by name. In practice, I&rsquo;ve found
 it worthwhile to start every project as a package because the little extra mechanism
-added at the start makes later distribution effortless.</p><p>The command <code>uv init --package octavius</code> will create a package structure containing</p><pre><code>octavius/
+added at the start makes later distribution effortless.</p>
+<p>The command <code>uv init --package octavius</code> will create a package structure containing</p>
+<pre><code>octavius/
 ├── pyproject.toml
 └── src
     └── octavius
         └── __init__.py
-</code></pre><p>Then, if you <code>cd octavius</code> and <code>uv sync</code> the package <code>octavius</code> will be installed into
-your virtualenv.</p><p>You have created a package octavius and you can import it directly in your notebooks like:</p><pre><code>import octavius
-</code></pre><p>Now, if I create <code>octavius/toys.py</code> with a function <code>lego</code> in it. I could then</p><pre><code>from octavius import toys
+</code></pre>
+<p>Then, if you <code>cd octavius</code> and <code>uv sync</code> the package <code>octavius</code> will be installed into
+your virtualenv.</p>
+<p>You have created a package octavius and you can import it directly in your notebooks like:</p>
+<pre><code>import octavius
+</code></pre>
+<p>Now, if I create <code>octavius/toys.py</code> with a function <code>lego</code> in it. I could then</p>
+<pre><code>from octavius import toys
 toys.lego()
-</code></pre><p>or similar.</p><p>To create a submodule in <code>octavius/friends</code> just create the directory and put an empty
+</code></pre>
+<p>or similar.</p>
+<p>To create a submodule in <code>octavius/friends</code> just create the directory and put an empty
 <code>__init__.py</code> to mark it as a module. Then, with <code>octavius/friends/mary.py</code> you could
-import that with</p><pre><code>from octavius.friends import mary
+import that with</p>
+<pre><code>from octavius.friends import mary
 print(f&quot;mary.{hobbies()=}&quot;)
-</code></pre><h2 id=a-big-gotcha>a big gotcha</h2><p>If you are missing a build system in your <code>pyproject.toml</code> you will not be able to
+</code></pre>
+<h2 id="a-big-gotcha">a big gotcha</h2>
+<p>If you are missing a build system in your <code>pyproject.toml</code> you will not be able to
 import your package. Unfortunately, <code>uv</code> gives no indication that anything is wrong, you
-will just get an <code>ImportError</code> when you try to import your package.</p><pre><code>[build-system]
+will just get an <code>ImportError</code> when you try to import your package.</p>
+<pre><code>[build-system]
 requires = [&quot;hatchling&quot;]
 build-backend = &quot;hatchling.build&quot;
-</code></pre><p>You can confirm that <code>uv</code> has installed your package with</p><pre><code>uv pip list | grep octavius
-</code></pre></main><footer><p>contact me via
-<a rel=me href=https://github.com/mwartell>GitHub/mwartell</a>
-<a href=mailto:matt.wartell@gmail.com>matt.wartell@gmail.com</a>
-<a rel=external href=https://linkedin.com/in/mattwartell>LinkedIn:mattwartell</a></p><p>this website was built with <a href=https://gohugo.io>Hugo</a>.</p></footer></body></html>
+</code></pre>
+<p>You can confirm that <code>uv</code> has installed your package with</p>
+<pre><code>uv pip list | grep octavius
+</code></pre>
+
+
+
+    </main>
+
+    <footer>
+      <p>contact me via
+        <a rel="me" href="https://github.com/mwartell">GitHub/mwartell</a>
+        <a href="mailto:matt.wartell@gmail.com">matt.wartell@gmail.com</a>
+        <a rel="external" href="https://linkedin.com/in/mattwartell">LinkedIn:mattwartell</a>
+      </p>
+      <p>this website was built with <a href="https://gohugo.io">Hugo</a>.</p>
+    </footer>
+  </body>
+
+</html>
