@@ -4,5 +4,5 @@ version = "2025.03.22"
 description = "a presonal blog (now with pelican!)"
 requires-python = ">=3.12"
 dependencies = [
-    "blag>=2.3.2",
+    "blag @ git+https://github.com/mwartell/blag.git",
 ]
