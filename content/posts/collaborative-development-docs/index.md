@@ -6,10 +6,6 @@ tags: ["agentic development"]
 draft: false
 ---
 
-# Collaborative Diagnostic Documentation: A New Methodology for AI-Assisted Technical Investigation
-
-*January 26, 2026*
-
 In the rapidly evolving landscape of AI-assisted software development, new patterns of human-machine collaboration are emerging that challenge traditional approaches to technical documentation and problem-solving. Through analyzing real-world debugging sessions between developers and AI assistants, I've identified a novel methodology I call **Collaborative Diagnostic Documentation** (CDD) - a structured approach to capturing, analyzing, and building upon interactive technical investigations.
 
 ## The Problem: Lost Knowledge in Interactive Sessions

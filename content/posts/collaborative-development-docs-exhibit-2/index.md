@@ -7,6 +7,8 @@ topics:
   - bedrock
   - error_diagnosis
 agent: Copilot Claude Opus 4.5
+build:
+  list: false
 ---
 
 This is a continuation of the exploration in 2025-01-26-bedrock-input-error.md. The fix performed did not work. I have some more data to explore.

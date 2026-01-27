@@ -4,7 +4,7 @@ build:
 
 # Serve the site locally with live reload
 serve:
-    hugo server -D --port 8220
+    hugo server -D --port 8220 --openBrowser
 
 # Clean build output
 clean:
@@ -30,3 +30,6 @@ test-headed: install
 # Run Playwright tests and show HTML report
 test-report: install
     npx playwright test && npx playwright show-report
+
+open:
+    open https://mwartell.github.io
