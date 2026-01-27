@@ -1,19 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Agentic Development on mwartell maladies</title>
-    <link>http://localhost:8220/tags/agentic-development/</link>
-    <description>Recent content in Agentic Development on mwartell maladies</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Mon, 26 Jan 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:8220/tags/agentic-development/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>collaborative development documentation</title>
-      <link>http://localhost:8220/posts/collaborative-development-docs/</link>
-      <pubDate>Mon, 26 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:8220/posts/collaborative-development-docs/</guid>
-      <description>&lt;h1 id=&#34;collaborative-diagnostic-documentation-a-new-methodology-for-ai-assisted-technical-investigation&#34;&gt;Collaborative Diagnostic Documentation: A New Methodology for AI-Assisted Technical Investigation&lt;/h1&gt;&#xA;&lt;p&gt;&lt;em&gt;January 26, 2026&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;In the rapidly evolving landscape of AI-assisted software development, new patterns of human-machine collaboration are emerging that challenge traditional approaches to technical documentation and problem-solving. Through analyzing real-world debugging sessions between developers and AI assistants, I&amp;rsquo;ve identified a novel methodology I call &lt;strong&gt;Collaborative Diagnostic Documentation&lt;/strong&gt; (CDD) - a structured approach to capturing, analyzing, and building upon interactive technical investigations.&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Agentic Development on mwartell maladies</title><link>https://mwartell.github.io/tags/agentic-development/</link><description>Recent content in Agentic Development on mwartell maladies</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 26 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://mwartell.github.io/tags/agentic-development/index.xml" rel="self" type="application/rss+xml"/><item><title>collaborative development documentation</title><link>https://mwartell.github.io/posts/collaborative-development-docs/</link><pubDate>Mon, 26 Jan 2026 00:00:00 +0000</pubDate><guid>https://mwartell.github.io/posts/collaborative-development-docs/</guid><description>&lt;h1 id="collaborative-diagnostic-documentation-a-new-methodology-for-ai-assisted-technical-investigation"&gt;Collaborative Diagnostic Documentation: A New Methodology for AI-Assisted Technical Investigation&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;January 26, 2026&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;In the rapidly evolving landscape of AI-assisted software development, new patterns of human-machine collaboration are emerging that challenge traditional approaches to technical documentation and problem-solving. Through analyzing real-world debugging sessions between developers and AI assistants, I&amp;rsquo;ve identified a novel methodology I call &lt;strong&gt;Collaborative Diagnostic Documentation&lt;/strong&gt; (CDD) - a structured approach to capturing, analyzing, and building upon interactive technical investigations.&lt;/p&gt;</description></item></channel></rss>
