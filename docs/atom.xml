@@ -75,12 +75,47 @@
 &lt;p&gt;&lt;strong&gt;Prompt 1 (Session 2)&lt;/strong&gt;: &amp;ldquo;So you have information you need without re-reading the previous exploration, please summarize the key points from 2025-01-26-bedrock-input-error.md for context.&amp;rdquo;&lt;/p&gt;
 &lt;p&gt;This created a &lt;strong&gt;knowledge handoff&lt;/strong&gt; where the AI reconstructed understanding from the previous session&amp;rsquo;s documentation, then extended the investigation with new data.&lt;/p&gt;
 &lt;h2&gt;Comparison to Existing Practices&lt;/h2&gt;
-&lt;p&gt;| Practice | Focus | Timing | Structure | Collaboration |
-|----------|--------|--------|-----------|---------------|
-| &lt;strong&gt;Postmortems&lt;/strong&gt; | Final analysis | After resolution | Formal template | Team review |
-| &lt;strong&gt;Session Logs&lt;/strong&gt; | Raw interactions | During session | Chronological | Passive recording |
-| &lt;strong&gt;Technical Specs&lt;/strong&gt; | Intended behavior | Before implementation | Structured | Author-driven |
-| &lt;strong&gt;CDD&lt;/strong&gt; | &lt;strong&gt;Investigation process&lt;/strong&gt; | &lt;strong&gt;During &amp;amp; between sessions&lt;/strong&gt; | &lt;strong&gt;Flexible but consistent&lt;/strong&gt; | &lt;strong&gt;Human-AI partnership&lt;/strong&gt; |&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Practice&lt;/th&gt;
+&lt;th&gt;Focus&lt;/th&gt;
+&lt;th&gt;Timing&lt;/th&gt;
+&lt;th&gt;Structure&lt;/th&gt;
+&lt;th&gt;Collaboration&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Postmortems&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Final analysis&lt;/td&gt;
+&lt;td&gt;After resolution&lt;/td&gt;
+&lt;td&gt;Formal template&lt;/td&gt;
+&lt;td&gt;Team review&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Session Logs&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Raw interactions&lt;/td&gt;
+&lt;td&gt;During session&lt;/td&gt;
+&lt;td&gt;Chronological&lt;/td&gt;
+&lt;td&gt;Passive recording&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Technical Specs&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Intended behavior&lt;/td&gt;
+&lt;td&gt;Before implementation&lt;/td&gt;
+&lt;td&gt;Structured&lt;/td&gt;
+&lt;td&gt;Author-driven&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;CDD&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Investigation process&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;During &amp;amp; between sessions&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Flexible but consistent&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Human-AI partnership&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 &lt;h3&gt;Novel Characteristics&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Temporal Flexibility&lt;/strong&gt;: Unlike postmortems (after) or specs (before), CDD documents the active investigation process, capturing knowledge as it emerges.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Cross-Session Continuity&lt;/strong&gt;: Traditional debugging sessions exist in isolation. CDD enables explicit knowledge transfer between sessions, allowing complex investigations to span multiple interactions while preserving context.&lt;/p&gt;
