@@ -6,3 +6,11 @@ __pycache__/
 resources/
 .hugo_build.lock
 public/
+
+# Node.js
+node_modules/
+package-lock.json
+
+# Playwright
+playwright-report/
+test-results/

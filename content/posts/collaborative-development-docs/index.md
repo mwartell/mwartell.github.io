@@ -256,6 +256,16 @@ The examples analyzed here represent early instances of this emerging practice. 
 
 For organizations serious about leveraging AI assistance while maintaining institutional knowledge, Collaborative Diagnostic Documentation offers a path forward that honors both the power of collaborative reasoning and the necessity of persistent knowledge capture.
 
+## Appendices
+
+The following exhibits demonstrate the CDD methodology in practice through actual debugging sessions from the AiOx project:
+
+- **[Exhibit A: Bedrock Input Error Handling](../collaborative-development-docs-exhibit-1/)** - Initial investigation of a Bedrock API validation error, demonstrating hypothesis formation, evidence analysis, and collaborative problem-solving that identified a message format conversion issue.
+
+- **[Exhibit B: Bedrock Input Error Handling - Take 2](../collaborative-development-docs-exhibit-2/)** - Continuation session showing explicit knowledge handoff, where the AI reconstructed context from the previous session's documentation and discovered a second, related issue in the message processing pipeline.
+
+These complete, unedited session documents illustrate the structured prompt-response pattern, evidence-first reasoning, and iterative continuity that characterize the CDD approach.
+
 ---
 
 *This analysis is based on real-world debugging sessions from the AiOx project, demonstrating how novel documentation methodologies emerge organically from new collaborative workflows. The techniques described here represent observed practices that could benefit from formal study and tool development.*

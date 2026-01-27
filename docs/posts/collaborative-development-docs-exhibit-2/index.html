@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8220&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="author" content="matt wartell">
+    <meta name="description" content="the fourth most influential blog in the galaxy…">
+    <link rel="alternate" href="/index.xml" type="application/atom+xml">
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&family=Enriqueta&family=Lato&display=swap" rel="stylesheet">
+    <title>Bedrock Input Error Handling - Take 2 | the fourth most influential blog in the galaxy…</title>
+  </head>
+
+  <body>
+    <header>
+      <h1><a href="/">mwartell maladies</a></h1>
+      <nav>
+        <h2>the fourth most influential blog in the galaxy…</h2>
+        <ul>
+          <li><h2><a href="/">Blog</a></h2></li>
+          
+          <li><h2><a href="/tags/">Tags</a></h2></li>
+          <li><h2><a href="/about/">About Me</a></h2></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+    
+
+  
+  <h2>Bedrock Input Error Handling - Take 2</h2>
+  
+
+  <aside>
+    <p>published on 2025-01-26
+
+    
+    </p>
+  </aside>
+
+  <p>This is a continuation of the exploration in 2025-01-26-bedrock-input-error.md. The fix performed did not work. I have some more data to explore.</p>
+<h1 id="prompt-1-summarize-2025-01-26-bedrock-input-errormd-for-context">Prompt 1: summarize 2025-01-26-bedrock-input-error.md for context</h1>
+<p>So you have information you need without re-reading the previous exploration, please summarize the key points from 2025-01-26-bedrock-input-error.md for context. You are the consumer of this summary so make it suitable for your purposes.</p>
+<h1 id="response-1-summary-so-far">Response 1: summary so far</h1>
+<h2 id="issue-and-root-cause">Issue and Root Cause</h2>
+<p>Issue #288 reports Prima-Code failures with Bedrock models. Investigation of Logfire trace <code>019bfc9786f2a881dcb5e827d56f083e</code> identified the root cause:</p>
+<p><strong>The message adapter creates empty TextParts when assistant messages have <code>content=None</code> with tool calls, and Bedrock&rsquo;s Converse API validation rejects messages with blank text fields.</strong></p>
+<p>Specific error location: <code>messages.5.content.1</code> containing <code>TextPart(content=&quot;&quot;)</code>.</p>
+<h2 id="technical-details">Technical Details</h2>
+<p>The defect is in <a href="aiox/src/aiox/adapter.py#L699">aiox/src/aiox/adapter.py</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_assistant_content_text</span>(content: Any) <span style="color:#f92672">-&gt;</span> str <span style="color:#f92672">|</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> content <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&#34;</span>  <span style="color:#75715e"># ← Problematic: converts None to empty string</span>
+</span></span></code></pre></div><p>This causes the conversion chain:</p>
+<ol>
+<li>OpenAI format: <code>{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: None, &quot;tool_calls&quot;: [...]}</code></li>
+<li>Adapter creates: <code>{&quot;role&quot;: &quot;assistant&quot;, &quot;parts&quot;: [ToolCallPart(...), TextPart(content=&quot;&quot;)]}</code></li>
+<li>Bedrock rejects the blank TextPart; OpenAI tolerates it</li>
+</ol>
+<p>Test <code>test_assistant_parts_accepts_none_content()</code> in <a href="tests/usage/test_usage_metadata_and_binding.py#L238">tests/usage/test_usage_metadata_and_binding.py:238</a> explicitly documents and validates this incorrect behavior.</p>
+<h2 id="proposed-fix">Proposed Fix</h2>
+<p>Change <code>_assistant_content_text()</code> to return <code>None</code> instead of <code>&quot;&quot;</code> when content is <code>None</code>. The downstream <code>_assistant_content_parts()</code> logic already handles <code>None</code> correctly by returning an empty parts list, which represents &ldquo;no text content&rdquo; correctly for all providers.</p>
+<p><strong>Impact:</strong></p>
+<ul>
+<li>Bedrock: eliminates validation errors</li>
+<li>OpenAI: no behavioral change (tolerates both representations)</li>
+<li>Semantic correctness: <code>content=None</code> means &ldquo;no text&rdquo;, not &ldquo;empty text&rdquo;</li>
+</ul>
+<p><strong>Test updates required:</strong></p>
+<ul>
+<li>Update <code>test_assistant_parts_accepts_none_content()</code> to expect empty parts list instead of list with empty TextPart</li>
+</ul>
+<h2 id="status">Status</h2>
+<p><strong>Fix implemented in commit <code>2d19953</code></strong> (on branch <code>288-prima-code-not-working-with-bedrock</code>).</p>
+<p>The implementation included:</p>
+<ul>
+<li>Modified <code>_assistant_content_text()</code> to return <code>None</code> instead of <code>&quot;&quot;</code> for empty content</li>
+<li>Created comprehensive test suite in <a href="tests/unit/test_assistant_empty_content.py">tests/unit/test_assistant_empty_content.py</a></li>
+<li>Updated existing test <code>test_assistant_parts_accepts_none_content()</code> to expect empty parts list</li>
+<li>Added &ldquo;Tool Calling and Content Fields&rdquo; section to <a href="docs/openai-protocol.md">docs/openai-protocol.md</a></li>
+</ul>
+<p>All tests pass, including new tests that verify the fix resolves the Bedrock validation error.</p>
+<h1 id="prompt-2-explore-the-aglet-traces">Prompt 2: Explore the Aglet traces</h1>
+<p>I ran Prima-Code (an OpenAI Codex fork) on the single input</p>
+<blockquote>
+<p>What is an aglet?</p>
+</blockquote>
+<p>There were two traces generated in logfire by this prompt:</p>
+<ol>
+<li>019bfcbf71c954390627a606ed5d50b2</li>
+<li>019bfcbf837ff964bb4d5328e887de30</li>
+</ol>
+<p>Explore these traces and see if it adds any information to help diagnose the Bedrock input error.</p>
+<h1 id="response-2-exploration-of-aglet-traces">Response 2: exploration of Aglet traces</h1>
+<h2 id="overview">Overview</h2>
+<p>Examined two Logfire traces generated from the same Prima-Code query &ldquo;What is an aglet?&rdquo;:</p>
+<ol>
+<li><strong>Trace 019bfcbf71c954390627a606ed5d50b2</strong>: Initial HTTP request to <code>/v1/chat/completions</code> endpoint</li>
+<li><strong>Trace 019bfcbf837ff964bb4d5328e887de30</strong>: Backend processing that triggered the Bedrock error</li>
+</ol>
+<p><a href="https://logfire-us.pydantic.dev/mwartell/aiox?q=trace_id%3D%27019bfcbf837ff964bb4d5328e887de30%27">View trace 019bfcbf837ff964bb4d5328e887de30 in Logfire</a></p>
+<h2 id="critical-finding-a-different-issue">Critical Finding: A Different Issue</h2>
+<p>The traces reveal a <strong>different problem</strong> from the one fixed in Response 1. This is not about assistant messages with <code>content=None</code> and tool calls.</p>
+<h3 id="the-error">The Error</h3>
+<p>Bedrock validation error in trace 019bfcbf837ff964bb4d5328e887de30:</p>
+<pre tabindex="0"><code>status_code: 400
+model_name: anthropic.claude-3-5-sonnet-20240620-v1:0
+error: &#34;The text field in the ContentBlock object at messages.4.content.0 is blank.
+       Add text to the text field, and try again.&#34;
+Code: ValidationException
+</code></pre><h3 id="root-cause">Root Cause</h3>
+<p>The message history sent to Bedrock contains an <strong>empty user message</strong> at index 4:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{<span style="color:#e6db74">&#34;role&#34;</span>: <span style="color:#e6db74">&#34;user&#34;</span>, <span style="color:#e6db74">&#34;parts&#34;</span>: [{<span style="color:#e6db74">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;text&#34;</span>, <span style="color:#e6db74">&#34;content&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>}]}
+</span></span></code></pre></div><h3 id="message-sequence">Message Sequence</h3>
+<p>The complete message history shows:</p>
+<ol start="0">
+<li><strong>System</strong>: Coding agent system prompt</li>
+<li><strong>User</strong>: <code>&lt;environment_context&gt;...&lt;/environment_context&gt;</code></li>
+<li><strong>User</strong>: <code>&quot;what is an aglet?&quot;</code></li>
+<li><strong>Assistant</strong>: Tool call - <code>shell</code> command with <code>[&quot;rg&quot;, &quot;aglet&quot;, &quot;-i&quot;, ...]</code></li>
+<li><strong>User</strong>: Tool result - <code>&quot;{\&quot;output\&quot;:\&quot;tools/general-questions.txt:What is an aglet?\\n\&quot;...}&quot;</code></li>
+<li><strong>Assistant</strong>: Text response - <code>&quot;To answer your question about what an aglet is...&quot;</code></li>
+<li><strong>User</strong>: <code>&quot;&quot;</code> ← <strong>EMPTY MESSAGE - THIS IS THE PROBLEM</strong></li>
+</ol>
+<h3 id="where-the-problem-occurs">Where the Problem Occurs</h3>
+<p>Looking at the trace events:</p>
+<ol>
+<li><code>Tool-calling flow detected: preserving message order</code> (timestamp 23:59:28.223250Z)</li>
+<li><code>as_prompt_and_history return</code> shows the message history with the empty user message</li>
+<li>RAG context injection is invoked but fails (prima-web connection error)</li>
+<li>Guardrail processing completes with no violations</li>
+<li>Request sent to Bedrock with the malformed message history</li>
+<li>Bedrock rejects with ValidationException</li>
+</ol>
+<h3 id="analysis">Analysis</h3>
+<p>This empty user message appears to be injected by the message processing pipeline, likely in one of these areas:</p>
+<ol>
+<li><strong>Tool execution flow</strong>: The code in <a href="aiox/src/aiox/adapter.py">aiox/src/aiox/adapter.py</a> function <code>_prepare_tool_execution()</code> or <code>_extract_user_prompt()</code></li>
+<li><strong>Guardrail processing</strong>: After guardrail analysis, an empty message might be appended</li>
+<li><strong>Message history construction</strong>: The <code>to_model_messages()</code> or <code>as_prompt_and_history()</code> functions may incorrectly append an empty user message</li>
+</ol>
+<p>The trace shows this log: <code>&quot;Tool-calling flow detected: preserving message order&quot;</code> with <code>last_user_idx=2</code> and <code>total_messages=6</code>, which suggests the message ordering logic may be creating an empty placeholder message.</p>
+<h2 id="key-differences-from-previous-issue">Key Differences from Previous Issue</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Aspect</th>
+          <th>Previous Issue (Response 1)</th>
+          <th>Current Issue (Response 2)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Message Role</strong></td>
+          <td>Assistant</td>
+          <td>User</td>
+      </tr>
+      <tr>
+          <td><strong>Content Value</strong></td>
+          <td><code>None</code> with tool_calls</td>
+          <td>Empty string <code>&quot;&quot;</code></td>
+      </tr>
+      <tr>
+          <td><strong>Message Position</strong></td>
+          <td>After tool calls</td>
+          <td>After assistant text response</td>
+      </tr>
+      <tr>
+          <td><strong>Error Location</strong></td>
+          <td><code>messages.5.content.1</code></td>
+          <td><code>messages.4.content.0</code></td>
+      </tr>
+      <tr>
+          <td><strong>Root Cause</strong></td>
+          <td><code>_assistant_content_text()</code> converting <code>None</code> to <code>&quot;&quot;</code></td>
+          <td>Message pipeline adding empty user message</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="next-steps">Next Steps</h2>
+<p>Need to investigate:</p>
+<ol>
+<li><a href="aiox/src/aiox/adapter.py">aiox/src/aiox/adapter.py</a> - <code>_extract_user_prompt()</code> function (line 592 in trace)</li>
+<li><a href="aiox/src/aiox/adapter.py">aiox/src/aiox/adapter.py</a> - <code>to_model_messages()</code> function (line 635 in trace)</li>
+<li>How the message history is constructed when tool calls are present</li>
+<li>Why an empty user message is being appended after the assistant responds with text</li>
+</ol>
+<p>The fix will likely require filtering out or preventing the creation of empty user messages in the conversion pipeline.</p>
+<h1 id="prompt-3-next-steps">Prompt 3: Next steps</h1>
+<p>Proceed with your next steps listed in Response 2. Look to find logical errors in the message history handling, not merely patching out this symptom.</p>
+<p>Implement tests to show the current failures and then create a fix to resolve the Bedrock input error.</p>
+<h1 id="response-3-investigation-and-fix-implementation">Response 3: Investigation and Fix Implementation</h1>
+<h2 id="root-cause-analysis">Root Cause Analysis</h2>
+<p>The investigation confirmed the hypothesis from Response 2. The issue is in the <code>_extract_user_prompt</code> function in <a href="aiox/src/aiox/adapter.py#L555">aiox/src/aiox/adapter.py</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> has_tail:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Preserve chronological order: keep all messages in history</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&#34;</span>, messages  <span style="color:#75715e"># ← BUG: Returns empty string</span>
+</span></span></code></pre></div><p>When this empty string <code>&quot;&quot;</code> is passed to <code>agent.run(prompt, message_history=...)</code>, pydantic-ai creates a new <code>UserPromptPart(content=&quot;&quot;)</code> and appends it to the message history. Bedrock then rejects this empty user message with:</p>
+<pre tabindex="0"><code>The text field in the ContentBlock object at messages.N.content.0 is blank.
+</code></pre><h2 id="key-discovery-pydantic-ai-accepts-none-for-user_prompt">Key Discovery: pydantic-ai Accepts None for user_prompt</h2>
+<p>Examining the pydantic-ai Agent.run signature:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>user_prompt: str <span style="color:#f92672">|</span> Sequence[_messages<span style="color:#f92672">.</span>UserContent] <span style="color:#f92672">|</span> <span style="color:#66d9ef">None</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
+</span></span></code></pre></div><p>The <code>user_prompt</code> parameter explicitly accepts <code>None</code> as a default value. When <code>user_prompt=None</code>, pydantic-ai does <strong>not</strong> create a new user message - it simply uses the provided <code>message_history</code> as-is.</p>
+<h2 id="the-fix">The Fix</h2>
+<p>Changed <code>_extract_user_prompt</code> to return <code>None</code> instead of <code>&quot;&quot;</code> for tool-calling flows:</p>
+<p><strong>File:</strong> <a href="aiox/src/aiox/adapter.py">aiox/src/aiox/adapter.py</a></p>
+<ol>
+<li>Updated return type: <code>tuple[str, list[ModelMessage]]</code> → <code>tuple[str | None, list[ModelMessage]]</code></li>
+<li>Changed return statement: <code>return &quot;&quot;, messages</code> → <code>return None, messages</code></li>
+<li>Updated <code>as_prompt_and_history</code> method&rsquo;s return type annotation similarly</li>
+</ol>
+<h2 id="tests-created">Tests Created</h2>
+<p>Created comprehensive test suite in <a href="tests/unit/test_empty_user_prompt.py">tests/unit/test_empty_user_prompt.py</a>:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Test</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>test_tool_tail_returns_none_prompt</code></td>
+          <td>Verifies None is returned for tool-calling flows</td>
+      </tr>
+      <tr>
+          <td><code>test_tool_tail_preserves_message_order</code></td>
+          <td>Verifies all messages stay in history with correct order</td>
+      </tr>
+      <tr>
+          <td><code>test_normal_flow_extracts_user_prompt</code></td>
+          <td>Verifies normal chat still extracts prompt as string</td>
+      </tr>
+      <tr>
+          <td><code>test_chat_request_tool_flow_returns_none</code></td>
+          <td>Integration test via ChatRequest API</td>
+      </tr>
+      <tr>
+          <td><code>test_user_parts_with_empty_string_creates_part</code></td>
+          <td>Documents that empty string does create parts</td>
+      </tr>
+      <tr>
+          <td><code>test_none_prompt_does_not_add_user_message</code></td>
+          <td>Verifies the Aglet trace scenario is fixed</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="existing-tests-updated">Existing Tests Updated</h2>
+<p>Updated two tests in <a href="tests/integration/test_chat_request.py">tests/integration/test_chat_request.py</a> to expect <code>None</code> instead of <code>&quot;&quot;</code>:</p>
+<ul>
+<li><code>test_as_prompt_and_history_preserves_order_with_tool_tail</code></li>
+<li><code>test_as_prompt_and_history_content_values_with_tool_tail</code></li>
+</ul>
+<h2 id="verification">Verification</h2>
+<p>All 11 tests pass:</p>
+<pre tabindex="0"><code>tests/unit/test_empty_user_prompt.py: 6 passed
+tests/integration/test_chat_request.py: 5 passed
+</code></pre><h2 id="why-this-is-the-right-fix">Why This Is the Right Fix</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Aspect</th>
+          <th>Before (Bug)</th>
+          <th>After (Fix)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Return value</strong></td>
+          <td><code>&quot;&quot;</code> (empty string)</td>
+          <td><code>None</code></td>
+      </tr>
+      <tr>
+          <td><strong>pydantic-ai behavior</strong></td>
+          <td>Creates <code>UserPromptPart(content=&quot;&quot;)</code></td>
+          <td>Skips user message creation</td>
+      </tr>
+      <tr>
+          <td><strong>Bedrock result</strong></td>
+          <td>ValidationException</td>
+          <td>✓ Valid</td>
+      </tr>
+      <tr>
+          <td><strong>OpenAI result</strong></td>
+          <td>✓ Works (tolerates empty)</td>
+          <td>✓ Works</td>
+      </tr>
+      <tr>
+          <td><strong>Semantic meaning</strong></td>
+          <td>&ldquo;User sent empty text&rdquo;</td>
+          <td>&ldquo;No new user input&rdquo;</td>
+      </tr>
+  </tbody>
+</table>
+<p>The fix is semantically correct: when continuing a tool-calling conversation, there truly is no new user input - the user&rsquo;s original question is already in the message history. Returning <code>None</code> correctly expresses this, while <code>&quot;&quot;</code> incorrectly implies the user sent an empty message.</p>
+<h2 id="files-modified">Files Modified</h2>
+<ol>
+<li><a href="aiox/src/aiox/adapter.py">aiox/src/aiox/adapter.py</a> - Core fix</li>
+<li><a href="tests/unit/test_empty_user_prompt.py">tests/unit/test_empty_user_prompt.py</a> - New tests (created)</li>
+<li><a href="tests/integration/test_chat_request.py">tests/integration/test_chat_request.py</a> - Updated assertions</li>
+</ol>
+
+
+
+    </main>
+
+    <footer>
+      <p>contact me via
+        <a rel="me" href="https://github.com/mwartell">GitHub/mwartell</a>
+        <a href="mailto:matt.wartell@gmail.com">matt.wartell@gmail.com</a>
+        <a rel="external" href="https://linkedin.com/in/mattwartell">LinkedIn:mattwartell</a>
+      </p>
+      <p>this website was built with <a href="https://gohugo.io">Hugo</a>.</p>
+    </footer>
+  </body>
+
+</html>

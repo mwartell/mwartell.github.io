@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8220&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="author" content="matt wartell">
+    <meta name="description" content="the fourth most influential blog in the galaxy…">
+    <link rel="alternate" href="/index.xml" type="application/atom+xml">
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&family=Enriqueta&family=Lato&display=swap" rel="stylesheet">
+    <title>Bedrock Input Error Handling | the fourth most influential blog in the galaxy…</title>
+  </head>
+
+  <body>
+    <header>
+      <h1><a href="/">mwartell maladies</a></h1>
+      <nav>
+        <h2>the fourth most influential blog in the galaxy…</h2>
+        <ul>
+          <li><h2><a href="/">Blog</a></h2></li>
+          
+          <li><h2><a href="/tags/">Tags</a></h2></li>
+          <li><h2><a href="/about/">About Me</a></h2></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+    
+
+  
+  <h2>Bedrock Input Error Handling</h2>
+  
+
+  <aside>
+    <p>published on 2025-01-26
+
+    
+    </p>
+  </aside>
+
+  <p>This is a diagnostic investigation into an error encountered when using Prima-Code with Bedrock models. There is a developer prompt followed buy the Copilot&rsquo;s analysis.</p>
+<h2 id="prompt-1-explore-the-logfire-traces">Prompt 1: explore the logfire traces</h2>
+<p>There is an <a href="https://github.com/esimplicityinc/prima-engine/issues/288">Issue #288 Prima-Code Not Working with Bedrock Models</a> that describes a problem when using Prima-Code with Bedrock models.</p>
+<p>I have reproduced the fault and there is a logfire trace 019bfc9786f2a881dcb5e827d56f083e that shows the error. Read through the trace and see if you can determine the cause.</p>
+<p>The preceding trace 019bfc9786f2a881dcb5e827d56f083e from the same Prima-Code session shows a successful call to the same Bedrock model.</p>
+<p>The weird thing is that it looks like the Prima-Code client may be initiating the second call on its own, because the second trace happens almost immediately after the first trace completes and it contains a user message</p>
+<pre tabindex="0"><code>ChatMessage(
+    role=&#39;user&#39;
+    content=&#39;&#39;&#39;Bug summary
+    Prima Code Dies when Attached to Bedrock
+
+    Description
+    When we use Bedrock with Prima Cod...&#39;&#39;&#39;
+    ...
+)
+</code></pre><p>which looks like the answer from the model received in the first trace. See if you can confirm or deny that hypothesis.</p>
+<h2 id="response-1-analysis-of-the-logfire-traces">Response 1: analysis of the logfire traces</h2>
+<h3 id="root-cause-identification">Root Cause Identification</h3>
+<p>The Logfire trace <code>019bfc9786f2a881dcb5e827d56f083e</code> reveals the exact cause of the Bedrock validation error. The failure occurs at <strong>messages.5.content.1</strong> where Bedrock rejects an assistant message containing an empty text content block.</p>
+<p><strong>Error Details:</strong></p>
+<pre tabindex="0"><code>The text field in the ContentBlock object at messages.5.content.1 is blank.
+Add text to the text field, and try again.
+</code></pre><p>Examining the <code>pydantic_ai.all_messages</code> attribute in the trace shows the problematic message structure at index 7 (the assistant&rsquo;s response after the first tool call):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{<span style="color:#e6db74">&#34;role&#34;</span>:<span style="color:#e6db74">&#34;assistant&#34;</span>,<span style="color:#e6db74">&#34;parts&#34;</span>:[
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;type&#34;</span>:<span style="color:#e6db74">&#34;tool_call&#34;</span>,<span style="color:#e6db74">&#34;id&#34;</span>:<span style="color:#e6db74">&#34;tooluse_q_4DPUpHRImNF1WgLWlJnw&#34;</span>,<span style="color:#e6db74">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;shell&#34;</span>,<span style="color:#f92672">...</span>},
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;type&#34;</span>:<span style="color:#e6db74">&#34;text&#34;</span>,<span style="color:#e6db74">&#34;content&#34;</span>:<span style="color:#e6db74">&#34;&#34;</span>}  <span style="color:#75715e"># ← Empty text block causes validation error</span>
+</span></span><span style="display:flex;"><span>]}
+</span></span></code></pre></div><p>When an assistant message includes tool calls, the adapter is appending an empty text content block. Bedrock&rsquo;s Converse API validation rejects messages with blank text fields, even when tool calls are present.</p>
+<h3 id="hypothesis-verification-second-call-initiation">Hypothesis Verification: Second Call Initiation</h3>
+<p><strong>The hypothesis that Prima-Code client initiates a second call automatically is INCORRECT.</strong></p>
+<p>The trace shows a single continuous conversation with the following flow:</p>
+<ol>
+<li>User: &ldquo;hello&rdquo;</li>
+<li>Assistant: greeting response</li>
+<li>User: &ldquo;what insights about the engine code can you derive from this report:&rdquo;</li>
+<li>Assistant: asks for the report</li>
+<li>User: provides bug report (the &ldquo;Bug summary&rdquo; text)</li>
+<li>Assistant: makes tool call (<code>rg</code> search) <strong>+ empty text</strong> ← ERROR HERE</li>
+<li>User: tool result</li>
+<li>Assistant: analysis response</li>
+<li>User: empty message (new prompt)</li>
+</ol>
+<p>The &ldquo;Bug summary&rdquo; text is <strong>user input</strong>, not a model response being echoed. The user is providing the bug report that the assistant had requested in the previous turn. This is normal conversational flow, not client-initiated duplication.</p>
+<h3 id="message-conversion-issue">Message Conversion Issue</h3>
+<p>The problem lies in how the OpenAI chat completion format is converted to pydantic_ai&rsquo;s message format for Bedrock. Specifically, when an assistant turn contains tool calls but no text content in the OpenAI format, the conversion process creates:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># OpenAI format</span>
+</span></span><span style="display:flex;"><span>{<span style="color:#e6db74">&#34;role&#34;</span>: <span style="color:#e6db74">&#34;assistant&#34;</span>, <span style="color:#e6db74">&#34;tool_calls&#34;</span>: [<span style="color:#f92672">...</span>], <span style="color:#e6db74">&#34;content&#34;</span>: <span style="color:#66d9ef">None</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Gets converted to pydantic_ai format with problematic empty text</span>
+</span></span><span style="display:flex;"><span>{<span style="color:#e6db74">&#34;role&#34;</span>: <span style="color:#e6db74">&#34;assistant&#34;</span>, <span style="color:#e6db74">&#34;parts&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;tool_call&#34;</span>, <span style="color:#f92672">...</span>},
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;text&#34;</span>, <span style="color:#e6db74">&#34;content&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>}  <span style="color:#75715e"># Bedrock rejects this</span>
+</span></span><span style="display:flex;"><span>]}
+</span></span></code></pre></div><h3 id="fix-location">Fix Location</h3>
+<p>The issue is in the message adapter code, likely in methods that convert assistant responses:</p>
+<ul>
+<li><code>_assistant_content_parts()</code> - converts assistant content to parts list</li>
+<li><code>_assistant_content_text()</code> - extracts text from assistant content</li>
+</ul>
+<p>These methods need to filter out or avoid creating empty text content blocks when:</p>
+<ol>
+<li>The assistant message contains tool calls</li>
+<li>The text content is None or empty string</li>
+</ol>
+<h3 id="technical-context">Technical Context</h3>
+<ul>
+<li><strong>File:</strong> <a href="aiox/src/aiox/adapter.py">aiox/src/aiox/adapter.py</a></li>
+<li><strong>Trace ID:</strong> <code>019bfc9786f2a881dcb5e827d56f083e</code></li>
+<li><strong>Trace Link:</strong> <a href="https://logfire-us.pydantic.dev/mwartell/aiox?q=trace_id%3D%27019bfc9786f2a881dcb5e827d56f083e%27">https://logfire-us.pydantic.dev/mwartell/aiox?q=trace_id%3D%27019bfc9786f2a881dcb5e827d56f083e%27</a></li>
+<li><strong>Error Span:</strong> <code>chat anthropic.claude-3-5-sonnet-20240620-v1:0</code> (span_id: d525bca2b812f9a6)</li>
+<li><strong>Model:</strong> anthropic.claude-3-5-sonnet-20240620-v1:0 via Bedrock</li>
+<li><strong>HTTP Status:</strong> 400 ValidationException</li>
+</ul>
+<h2 id="prompt-2-planning-a-general-fix">Prompt 2: planning a general fix</h2>
+<p>The analysis in Response 1 seems reasonable. Propose a general fix that would prevent this kind of error from happening in the future when using Bedrock models with Prima-Code.</p>
+<p>But, before implementing the fix, analyze whether this is a demonstrable defect in the message handling and so ought work for say OpenAi or other models. If there is any Pydantic-AI or Anthropic documentation that supports your analysis, cite it.</p>
+<p>If the docs/openai-protocol.md needs to be revised in light of what you&rsquo;ve learned, please do it in addition to your response.</p>
+<h2 id="response-2-proposed-general-fix">Response 2: proposed general fix</h2>
+<h3 id="is-this-a-demonstrable-defect">Is This a Demonstrable Defect?</h3>
+<p><strong>Yes</strong>, this is a demonstrable defect in the message adapter that affects Bedrock (and potentially other providers) but not OpenAI.</p>
+<h4 id="evidence-from-code-and-tests">Evidence from Code and Tests</h4>
+<ol>
+<li>
+<p><strong>Current Behavior in <code>_assistant_content_text()</code></strong> (<a href="aiox/src/aiox/adapter.py#L699">aiox/src/aiox/adapter.py:699</a>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_assistant_content_text</span>(content: Any) <span style="color:#f92672">-&gt;</span> str <span style="color:#f92672">|</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> content <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&#34;</span>  <span style="color:#75715e"># ← Converts None to empty string</span>
+</span></span></code></pre></div></li>
+<li>
+<p><strong>Test Documenting This Behavior</strong> (<a href="tests/usage/test_usage_metadata_and_binding.py#L238">tests/usage/test_usage_metadata_and_binding.py:238</a>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_assistant_parts_accepts_none_content</span>() <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>    message <span style="color:#f92672">=</span> ChatMessage(role<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;assistant&#34;</span>, content<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>)
+</span></span><span style="display:flex;"><span>    parts <span style="color:#f92672">=</span> _assistant_parts(message)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> len(parts) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> isinstance(parts[<span style="color:#ae81ff">0</span>], TextPart)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> parts[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>content <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;&#34;</span>  <span style="color:#75715e"># ← Expects empty string</span>
+</span></span></code></pre></div></li>
+<li>
+<p><strong>Tool Chat Patterns</strong> show that when assistants make tool calls without text, <code>content=None</code> is the standard:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>ChatMessage(
+</span></span><span style="display:flex;"><span>    role<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;assistant&#34;</span>,
+</span></span><span style="display:flex;"><span>    content<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>,  <span style="color:#75715e"># ← No text when only making tool calls</span>
+</span></span><span style="display:flex;"><span>    tool_calls<span style="color:#f92672">=</span>[<span style="color:#f92672">...</span>]
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div></li>
+</ol>
+<h4 id="provider-specific-behavior">Provider-Specific Behavior</h4>
+<p><strong>OpenAI</strong>: Tolerates empty <code>content</code> fields in assistant messages with tool calls. OpenAI&rsquo;s API is lenient and doesn&rsquo;t validate that text content must be non-empty when tool calls are present.</p>
+<p><strong>Bedrock (Anthropic)</strong>: Strictly validates the Converse API format and rejects messages with blank text fields:</p>
+<pre tabindex="0"><code>ValidationException: The text field in the ContentBlock object at messages.N.content.M is blank.
+</code></pre><p><strong>pydantic-ai</strong>: The library converts messages to a provider-agnostic format with <code>parts[]</code>. When an empty TextPart is included, Bedrock&rsquo;s validation catches it but OpenAI doesn&rsquo;t.</p>
+<h3 id="root-cause-analysis">Root Cause Analysis</h3>
+<p>The conversion chain:</p>
+<ol>
+<li>OpenAI format: <code>{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: None, &quot;tool_calls&quot;: [...]}</code></li>
+<li><code>_assistant_content_text(None)</code> → returns <code>&quot;&quot;</code></li>
+<li><code>_assistant_content_parts(&quot;&quot;)</code> → returns <code>[TextPart(content=&quot;&quot;)]</code></li>
+<li>Final pydantic-ai message: <code>{&quot;role&quot;: &quot;assistant&quot;, &quot;parts&quot;: [ToolCallPart(...), TextPart(content=&quot;&quot;)]}</code></li>
+<li>Bedrock: <strong>REJECTS</strong> because TextPart has blank content</li>
+</ol>
+<h3 id="proposed-fix">Proposed Fix</h3>
+<p>Modify <code>_assistant_content_text()</code> to return <code>None</code> instead of <code>&quot;&quot;</code> when content is <code>None</code>, allowing <code>_assistant_content_parts()</code> to correctly filter out empty content:</p>
+<p><strong>File:</strong> <a href="aiox/src/aiox/adapter.py#L697">aiox/src/aiox/adapter.py</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_assistant_content_text</span>(content: Any) <span style="color:#f92672">-&gt;</span> str <span style="color:#f92672">|</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> content <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">None</span>  <span style="color:#75715e"># ← Changed from &#34;&#34; to None</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isinstance(content, str):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> content
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isinstance(content, list):
+</span></span><span style="display:flex;"><span>        fragments <span style="color:#f92672">=</span> _assistant_content_fragments(content)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> fragments:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>join(fragments)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> content <span style="color:#f92672">in</span> (<span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#66d9ef">None</span>):  <span style="color:#75715e"># This check now redundant with first check</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> str(content)
+</span></span></code></pre></div><p>The existing logic in <code>_assistant_content_parts()</code> already handles this correctly:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_assistant_content_parts</span>(content: Any) <span style="color:#f92672">-&gt;</span> list[ModelResponsePart]:
+</span></span><span style="display:flex;"><span>    normalized <span style="color:#f92672">=</span> _assistant_content_text(content)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> normalized <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> []  <span style="color:#75715e"># ← No TextPart created when None</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> [TextPart(content<span style="color:#f92672">=</span>normalized)]
+</span></span></code></pre></div><h3 id="impact-analysis">Impact Analysis</h3>
+<p><strong>What changes:</strong></p>
+<ul>
+<li>Assistant messages with <code>content=None</code> (tool-only responses) will no longer create empty TextParts</li>
+<li>The <code>parts[]</code> list will contain only ToolCallParts, no empty TextPart</li>
+</ul>
+<p><strong>What stays the same:</strong></p>
+<ul>
+<li>Assistant messages with actual text content work unchanged</li>
+<li>Assistant messages with both text and tool calls work unchanged</li>
+<li>User, system, and tool messages unaffected</li>
+</ul>
+<p><strong>Test Updates Required:</strong></p>
+<ul>
+<li><code>test_assistant_parts_accepts_none_content()</code> in <a href="tests/usage/test_usage_metadata_and_binding.py#L238">tests/usage/test_usage_metadata_and_binding.py:238</a> must be updated:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_assistant_parts_accepts_none_content</span>() <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>    message <span style="color:#f92672">=</span> ChatMessage(role<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;assistant&#34;</span>, content<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>)
+</span></span><span style="display:flex;"><span>    parts <span style="color:#f92672">=</span> _assistant_parts(message)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># After fix: empty content produces no parts, not empty TextPart</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> len(parts) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>  <span style="color:#75715e"># ← Changed from 1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Remove assertions about TextPart</span>
+</span></span></code></pre></div></li>
+</ul>
+<h3 id="why-this-fix-is-correct">Why This Fix Is Correct</h3>
+<ol>
+<li><strong>Bedrock Compatibility</strong>: Eliminates the validation error by not creating blank text content blocks</li>
+<li><strong>OpenAI Compatibility</strong>: OpenAI doesn&rsquo;t care whether empty TextParts are present or absent</li>
+<li><strong>Protocol Correctness</strong>: The OpenAI Chat Completion format allows <code>content</code> to be <code>null</code> when <code>tool_calls</code> is present. Our adapter should preserve this semantic distinction rather than converting null to empty string.</li>
+<li><strong>Pydantic-AI Alignment</strong>: pydantic-ai&rsquo;s message format naturally represents &ldquo;no text content&rdquo; as an empty parts list, not a list with an empty TextPart</li>
+</ol>
+<h3 id="alternative-considered-provider-specific-filtering">Alternative Considered: Provider-Specific Filtering</h3>
+<p>We could filter empty TextParts only when using Bedrock, but this is inferior because:</p>
+<ul>
+<li>It treats the symptom, not the cause</li>
+<li>It adds provider-specific complexity to the adapter</li>
+<li>The current behavior (creating empty TextParts) serves no purpose for any provider</li>
+<li>The semantic intent of <code>content=None</code> is &ldquo;no text&rdquo;, not &ldquo;empty text&rdquo;</li>
+</ul>
+<h3 id="documentation-updates">Documentation Updates</h3>
+<p>The <a href="docs/openai-protocol.md">docs/openai-protocol.md</a> document currently doesn&rsquo;t address the <code>content</code> field behavior for tool-calling scenarios. No updates are strictly required, but it would benefit from a section documenting this edge case.</p>
+<h2 id="prompt-3-implement-the-fix">Prompt 3: implement the fix</h2>
+<p>This sounds like a simple change.</p>
+<p>Create unit tests that should fail currently but would pass after the fix is implemented. Confirm that these tests fail before making the fix.</p>
+<p>Then implement the fix and verify that the new tests pass and the old tests still pass.</p>
+<h2 id="response-3-implementation-completed">Response 3: implementation completed</h2>
+<p>Implemented the fix in commit <code>2d19953</code>. The changes included:</p>
+<h3 id="code-changes">Code Changes</h3>
+<p><strong><a href="aiox/src/aiox/adapter.py#L697-L702">aiox/src/aiox/adapter.py</a></strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_assistant_content_text</span>(content: Any) <span style="color:#f92672">-&gt;</span> str <span style="color:#f92672">|</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> content <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">None</span>  <span style="color:#75715e"># ← Changed from &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isinstance(content, str):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> content <span style="color:#66d9ef">if</span> content <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">None</span>  <span style="color:#75715e"># ← Also handle empty strings</span>
+</span></span></code></pre></div><h3 id="new-tests-created">New Tests Created</h3>
+<p><strong><a href="tests/unit/test_assistant_empty_content.py">tests/unit/test_assistant_empty_content.py</a></strong> - Comprehensive test suite with 6 tests:</p>
+<ul>
+<li><code>test_assistant_content_text_returns_none_for_none_input()</code> - Verifies None input returns None</li>
+<li><code>test_assistant_content_parts_returns_empty_list_for_none()</code> - Verifies no TextParts created for None</li>
+<li><code>test_assistant_parts_with_only_tool_calls_no_text()</code> - Tool-only messages have no TextPart</li>
+<li><code>test_assistant_parts_with_tool_calls_and_text()</code> - Both text and tools work correctly</li>
+<li><code>test_assistant_parts_with_text_only()</code> - Text-only messages unchanged</li>
+<li><code>test_assistant_content_text_with_empty_string()</code> - Empty strings also return None</li>
+</ul>
+<h3 id="updated-tests">Updated Tests</h3>
+<p><strong><a href="tests/usage/test_usage_metadata_and_binding.py#L238">tests/usage/test_usage_metadata_and_binding.py:238</a></strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_assistant_parts_accepts_none_content</span>() <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;After fix: content=None produces no parts, not an empty TextPart.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    message <span style="color:#f92672">=</span> ChatMessage(role<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;assistant&#34;</span>, content<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>)
+</span></span><span style="display:flex;"><span>    parts <span style="color:#f92672">=</span> _assistant_parts(message)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> len(parts) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>  <span style="color:#75715e"># ← Changed from expecting 1 part with empty TextPart</span>
+</span></span></code></pre></div><h3 id="documentation-updates-1">Documentation Updates</h3>
+<p><strong><a href="docs/openai-protocol.md">docs/openai-protocol.md</a></strong> - Added comprehensive section &ldquo;Tool Calling and Content Fields&rdquo; covering:</p>
+<ul>
+<li>Semantic meaning of <code>content=None</code> vs <code>content=&quot;&quot;</code></li>
+<li>Examples of tool-only and tool+text assistant messages</li>
+<li>Adapter behavior before and after fix</li>
+<li>Provider compatibility (OpenAI lenient, Bedrock strict)</li>
+<li>Best practices</li>
+</ul>
+<h3 id="test-results">Test Results</h3>
+<p>All tests pass including the new test suite that specifically validates the fix for Issue #288.</p>
+
+
+
+    </main>
+
+    <footer>
+      <p>contact me via
+        <a rel="me" href="https://github.com/mwartell">GitHub/mwartell</a>
+        <a href="mailto:matt.wartell@gmail.com">matt.wartell@gmail.com</a>
+        <a rel="external" href="https://linkedin.com/in/mattwartell">LinkedIn:mattwartell</a>
+      </p>
+      <p>this website was built with <a href="https://gohugo.io">Hugo</a>.</p>
+    </footer>
+  </body>
+
+</html>
