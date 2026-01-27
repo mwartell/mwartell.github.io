@@ -1,8 +1,9 @@
 ---
-title: collaborative development documentation
-subtitle: a new methodology for ai-assisted technical investigation
+title: "collaborative development documentation"
+subtitle: "a new methodology for ai-assisted technical investigation"
 date: 2026-01-26
-tags: agentic development
+tags: ["agentic development"]
+draft: false
 ---
 
 # Collaborative Diagnostic Documentation: A New Methodology for AI-Assisted Technical Investigation

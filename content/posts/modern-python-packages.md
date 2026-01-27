@@ -1,7 +1,8 @@
 ---
-title: making python packages the modern way
+title: "making python packages the modern way"
 date: 2025-01-29
-tags: python packaging
+tags: ["python packaging"]
+draft: false
 ---
 
 

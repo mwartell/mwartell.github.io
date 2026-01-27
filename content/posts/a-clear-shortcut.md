@@ -1,7 +1,8 @@
 ---
-title: a clear shortcut
+title: "a clear shortcut"
 date: 2021-09-21
-tags: shell
+tags: ["shell"]
+draft: false
 ---
 
 When sharing terminal screens in video conferencing, I often see

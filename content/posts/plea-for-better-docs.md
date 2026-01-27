@@ -1,7 +1,8 @@
 ---
-title: a plea for better developer documentation
-category: docs
+title: "a plea for better developer documentation"
 date: 2024-12-04
+tags: ["simplicity", "minimalism"]
+draft: false
 ---
 
 This notion has been in my head for years, but seeing the instructions for
