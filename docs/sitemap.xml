@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>//localhost:8220/</loc>
+    <lastmod>2026-01-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:8220/tags/agentic-development/</loc>
+    <lastmod>2026-01-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:8220/collaborative-development-docs/</loc>
+    <lastmod>2026-01-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:8220/tags/</loc>
+    <lastmod>2026-01-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:8220/modern-python-packages/</loc>
+    <lastmod>2025-01-29T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:8220/tags/python-packaging/</loc>
+    <lastmod>2025-01-29T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:8220/plea-for-better-docs/</loc>
+    <lastmod>2024-12-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:8220/a-clear-shortcut/</loc>
+    <lastmod>2021-09-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:8220/tags/shell/</loc>
+    <lastmod>2021-09-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:8220/about/</loc>
+  </url><url>
+    <loc>//localhost:8220/categories/</loc>
+  </url>
+</urlset>
