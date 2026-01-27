@@ -1,3 +1,8 @@
+---
+title: "About Me"
+layout: "single"
+---
+
 # Matt Wartell: A Portrait in Pixels and Prose
 
 Matt Wartell occupies the curious intersection where engineering precision meets

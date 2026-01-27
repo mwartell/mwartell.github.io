@@ -1,0 +1,26 @@
+{{ define "title" }}{{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+
+{{ $posts := where .Site.RegularPages "Section" "posts" }}
+{{ range first 15 $posts }}
+
+  <article>
+    <header>
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+      <div>
+      <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      {{ if .Params.subtitle }}
+      <p>— {{ .Params.subtitle }}</p>
+      {{ end }}
+      </div>
+    </header>
+  </article>
+
+{{ end }}
+
+{{ if gt (len $posts) 15 }}
+<p><a href="/posts/">all articles...</a></p>
+{{ end }}
+
+{{ end }}

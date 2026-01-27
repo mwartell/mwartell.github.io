@@ -1,8 +1,0 @@
-[project]
-name = "mwartell-github-io"
-version = "2025.03.22"
-description = "a presonal blog (now with pelican!)"
-requires-python = ">=3.12"
-dependencies = [
-    "blag @ git+https://github.com/mwartell/blag.git",
-]
