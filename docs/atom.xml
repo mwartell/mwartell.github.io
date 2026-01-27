@@ -1,5 +1,212 @@
-<?xml version="1.0" encoding="utf8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>mwartell maladies</title><link href="https://mwartell.github.io/" rel="alternate"></link><link href="https://mwartell.github.io/atom.xml" rel="self"></link><id>https://mwartell.github.io/</id><updated>2025-01-29T00:00:00-05:00</updated><subtitle>the fourth most influential blog in the galaxy…</subtitle><entry><title>making python packages the modern way</title><link href="https://mwartell.github.io/modern-python-packages.html" rel="alternate"></link><published>2025-01-29T00:00:00-05:00</published><updated>2025-01-29T00:00:00-05:00</updated><author><name>matt wartell</name></author><id>tag:mwartell.github.io,2025-01-29:/modern-python-packages.html</id><summary type="html">making python packages the modern way</summary><content type="html">&lt;p&gt;Although the [uv package and project management tool][uv] has been taking the Python
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>mwartell maladies</title><link href="https://mwartell.github.io/" rel="alternate"></link><link href="https://mwartell.github.io/atom.xml" rel="self"></link><id>https://mwartell.github.io/</id><updated>2026-01-26T00:00:00-05:00</updated><subtitle>the fourth most influential blog in the galaxy…</subtitle><entry><title>collaborative development documentation</title><link href="https://mwartell.github.io/collaborative-development-docs.html" rel="alternate"></link><published>2026-01-26T00:00:00-05:00</published><updated>2026-01-26T00:00:00-05:00</updated><author><name>matt wartell</name></author><id>tag:mwartell.github.io,2026-01-26:/collaborative-development-docs.html</id><summary type="html">collaborative development documentation</summary><content type="html">&lt;h1&gt;Collaborative Diagnostic Documentation: A New Methodology for AI-Assisted Technical Investigation&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;January 26, 2026&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;In the rapidly evolving landscape of AI-assisted software development, new patterns of human-machine collaboration are emerging that challenge traditional approaches to technical documentation and problem-solving. Through analyzing real-world debugging sessions between developers and AI assistants, I&amp;rsquo;ve identified a novel methodology I call &lt;strong&gt;Collaborative Diagnostic Documentation&lt;/strong&gt; (CDD) - a structured approach to capturing, analyzing, and building upon interactive technical investigations.&lt;/p&gt;
+&lt;h2&gt;The Problem: Lost Knowledge in Interactive Sessions&lt;/h2&gt;
+&lt;p&gt;Traditional software engineering documentation falls into predictable categories:
+- &lt;strong&gt;Post-mortem reports&lt;/strong&gt; that summarize what went wrong after the fact
+- &lt;strong&gt;Technical specifications&lt;/strong&gt; that describe intended behavior
+- &lt;strong&gt;Session logs&lt;/strong&gt; that capture raw interactions without analysis
+- &lt;strong&gt;Academic case studies&lt;/strong&gt; that retrospectively analyze engineering challenges&lt;/p&gt;
+&lt;p&gt;But what happens when a developer and an AI assistant collaborate to solve a complex technical problem in real-time? The investigation process itself - the hypotheses, evidence gathering, iterative refinement, and collaborative reasoning - often contains more valuable knowledge than the final solution.&lt;/p&gt;
+&lt;p&gt;Consider this scenario: A production system fails with a cryptic error. A developer pairs with an AI assistant to investigate, spending hours diving through logs, testing hypotheses, and gradually building understanding. Traditional documentation might capture the final root cause and fix, but the investigative journey - the reasoning process, dead ends explored, and collaborative problem-solving techniques - gets lost.&lt;/p&gt;
+&lt;h2&gt;Enter Collaborative Diagnostic Documentation&lt;/h2&gt;
+&lt;p&gt;CDD addresses this gap by treating the investigative process itself as a first-class artifact worthy of structured documentation. Rather than simply logging interactions or writing post-hoc summaries, CDD captures the collaborative reasoning process in a format that can be understood, extended, and learned from.&lt;/p&gt;
+&lt;h3&gt;Core Principles&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Session as Artifact&lt;/strong&gt;: Each investigation session becomes a complete, standalone document&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Structured Metadata&lt;/strong&gt;: Consistent frontmatter enables navigation and cross-referencing&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Iterative Continuity&lt;/strong&gt;: Sessions build upon each other with explicit knowledge transfer&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Evidence-First Reasoning&lt;/strong&gt;: Claims are backed by concrete artifacts (logs, code, traces)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Collaborative Voice&lt;/strong&gt;: Both human and AI contributions are preserved and attributed&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Document Structure&lt;/h3&gt;
+&lt;p&gt;A typical CDD document follows this pattern:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nn"&gt;---&lt;/span&gt;
+&lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Brief Descriptive Title&lt;/span&gt;
+&lt;span class="nt"&gt;date&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;YYYY-MM-DD&lt;/span&gt;
+&lt;span class="nt"&gt;main_branch_commit&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;git-hash&lt;/span&gt;
+&lt;span class="nt"&gt;session_type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;collaborative_exploration | investigation | implementation&lt;/span&gt;
+&lt;span class="nt"&gt;topics&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;domain_area&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;technical_concept&lt;/span&gt;
+&lt;span class="nt"&gt;agent&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;AI Assistant Identity&lt;/span&gt;
+&lt;span class="nn"&gt;---&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The document body then follows a &lt;strong&gt;Prompt-Response&lt;/strong&gt; structure:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gu"&gt;## Prompt 1: Initial Problem Statement&lt;/span&gt;
+[Human describes the issue, provides context, asks specific questions]
+
+&lt;span class="gu"&gt;## Response 1: Analysis and Investigation&lt;/span&gt;
+[AI assistant analyzes evidence, forms hypotheses, identifies next steps]
+
+&lt;span class="gu"&gt;## Prompt 2: Follow-up Based on Analysis&lt;/span&gt;
+[Human provides additional data, refines questions based on AI insights]
+
+&lt;span class="gu"&gt;## Response 2: Deeper Investigation&lt;/span&gt;
+[AI assistant builds on previous analysis, tests hypotheses, proposes solutions]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;A Real-World Example&lt;/h2&gt;
+&lt;p&gt;Let me illustrate with a concrete example from a recent Bedrock API integration debugging session:&lt;/p&gt;
+&lt;h3&gt;Session Metadata&lt;/h3&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nn"&gt;---&lt;/span&gt;
+&lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Bedrock Input Error Handling&lt;/span&gt;
+&lt;span class="nt"&gt;date&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;2025-01-26&lt;/span&gt;
+&lt;span class="nt"&gt;main_branch_commit&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;eeefb97&lt;/span&gt;
+&lt;span class="nt"&gt;session_type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;collaborative_exploration&lt;/span&gt;
+&lt;span class="nt"&gt;topics&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;bedrock&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;error_diagnosis&lt;/span&gt;
+&lt;span class="nt"&gt;agent&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Copilot Claude Opus 4.5&lt;/span&gt;
+&lt;span class="nn"&gt;---&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;The Investigation Process&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Prompt 1&lt;/strong&gt;: The developer provided a specific Logfire trace ID and asked the AI to analyze a Bedrock validation error, including a hypothesis about client-initiated duplicate calls.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Response 1&lt;/strong&gt;: The AI performed detailed trace analysis, identifying the exact error location (&lt;code&gt;messages.5.content.1&lt;/code&gt; containing empty text), mapping it to message conversion logic, and &lt;strong&gt;refuting&lt;/strong&gt; the duplication hypothesis with evidence from the conversation flow.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Key Insights Captured&lt;/strong&gt;:
+- Root cause: OpenAI-to-Bedrock message format conversion creating empty &lt;code&gt;TextPart&lt;/code&gt; objects
+- Specific code location: &lt;code&gt;_assistant_content_text()&lt;/code&gt; method
+- Provider difference: Bedrock rejects empty text fields, OpenAI tolerates them&lt;/p&gt;
+&lt;h3&gt;Cross-Session Learning&lt;/h3&gt;
+&lt;p&gt;When the initial fix proved insufficient, a second session explicitly built upon the first:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Prompt 1 (Session 2)&lt;/strong&gt;: &amp;ldquo;So you have information you need without re-reading the previous exploration, please summarize the key points from 2025-01-26-bedrock-input-error.md for context.&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;This created a &lt;strong&gt;knowledge handoff&lt;/strong&gt; where the AI reconstructed understanding from the previous session&amp;rsquo;s documentation, then extended the investigation with new data.&lt;/p&gt;
+&lt;h2&gt;Comparison to Existing Practices&lt;/h2&gt;
+&lt;p&gt;| Practice | Focus | Timing | Structure | Collaboration |
+|----------|--------|--------|-----------|---------------|
+| &lt;strong&gt;Postmortems&lt;/strong&gt; | Final analysis | After resolution | Formal template | Team review |
+| &lt;strong&gt;Session Logs&lt;/strong&gt; | Raw interactions | During session | Chronological | Passive recording |
+| &lt;strong&gt;Technical Specs&lt;/strong&gt; | Intended behavior | Before implementation | Structured | Author-driven |
+| &lt;strong&gt;CDD&lt;/strong&gt; | &lt;strong&gt;Investigation process&lt;/strong&gt; | &lt;strong&gt;During &amp;amp; between sessions&lt;/strong&gt; | &lt;strong&gt;Flexible but consistent&lt;/strong&gt; | &lt;strong&gt;Human-AI partnership&lt;/strong&gt; |&lt;/p&gt;
+&lt;h3&gt;Novel Characteristics&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Temporal Flexibility&lt;/strong&gt;: Unlike postmortems (after) or specs (before), CDD documents the active investigation process, capturing knowledge as it emerges.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cross-Session Continuity&lt;/strong&gt;: Traditional debugging sessions exist in isolation. CDD enables explicit knowledge transfer between sessions, allowing complex investigations to span multiple interactions while preserving context.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Collaborative Reasoning&lt;/strong&gt;: Both human intuition and AI analysis are preserved as distinct but complementary contributions, creating a record of collaborative problem-solving.&lt;/p&gt;
+&lt;h2&gt;Implementation Guidelines&lt;/h2&gt;
+&lt;h3&gt;When to Use CDD&lt;/h3&gt;
+&lt;p&gt;CDD is most valuable for:
+- &lt;strong&gt;Complex technical investigations&lt;/strong&gt; requiring multiple hypotheses and evidence gathering
+- &lt;strong&gt;Novel system integrations&lt;/strong&gt; where documentation is sparse
+- &lt;strong&gt;Cross-team knowledge transfer&lt;/strong&gt; where the reasoning process matters as much as the solution
+- &lt;strong&gt;AI-assisted debugging&lt;/strong&gt; where human domain knowledge combines with AI analytical capabilities&lt;/p&gt;
+&lt;h3&gt;Not Appropriate For:&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Simple, well-understood issues with known solutions&lt;/li&gt;
+&lt;li&gt;Purely conversational or informational exchanges&lt;/li&gt;
+&lt;li&gt;Routine maintenance tasks&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Document Creation Workflow&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Session Planning&lt;/strong&gt;: Define the investigation scope and key questions&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Structured Interaction&lt;/strong&gt;: Follow prompt-response patterns with clear delineation&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Evidence Integration&lt;/strong&gt;: Include concrete artifacts (logs, code snippets, error messages)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hypothesis Tracking&lt;/strong&gt;: Explicitly state, test, and update hypotheses&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Knowledge Distillation&lt;/strong&gt;: Summarize key insights for future sessions&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cross-Referencing&lt;/strong&gt;: Link to related sessions and technical resources&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Metadata Standards&lt;/h3&gt;
+&lt;p&gt;Consistent metadata enables powerful navigation and analysis:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;session_type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;collaborative_exploration&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="c1"&gt;# Open-ended investigation&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;hypothesis_testing&lt;/span&gt;&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="c1"&gt;# Focused validation&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;implementation_planning&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="c1"&gt;# Solution design&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;knowledge_transfer&lt;/span&gt;&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="c1"&gt;# Cross-session handoff&lt;/span&gt;
+
+&lt;span class="nt"&gt;topics&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;domain-specific tags for filtering and discovery&lt;/span&gt;&lt;span class="p p-Indicator"&gt;]&lt;/span&gt;
+&lt;span class="nt"&gt;relates_to&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;links to related sessions or issues&lt;/span&gt;&lt;span class="p p-Indicator"&gt;]&lt;/span&gt;
+&lt;span class="nt"&gt;outcome&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;brief status&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;resolved&lt;/span&gt;&lt;span class="p p-Indicator"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;ongoing&lt;/span&gt;&lt;span class="p p-Indicator"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;blocked&lt;/span&gt;&lt;span class="p p-Indicator"&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Benefits and Outcomes&lt;/h2&gt;
+&lt;h3&gt;For Individuals&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Reduced Cognitive Load&lt;/strong&gt;: Complex investigations can be paused and resumed without losing context&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Learning Amplification&lt;/strong&gt;: The reasoning process becomes reviewable and improvable&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pattern Recognition&lt;/strong&gt;: Similar problems can be identified through topic tagging and search&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;For Teams&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Knowledge Sharing&lt;/strong&gt;: Investigation techniques and domain insights are captured beyond just solutions&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mentoring Tool&lt;/strong&gt;: Junior developers can study collaborative problem-solving approaches&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cross-Training&lt;/strong&gt;: Team members can understand areas outside their expertise&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;For Organizations&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Institutional Memory&lt;/strong&gt;: Complex technical knowledge isn&amp;rsquo;t lost when people leave&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Process Improvement&lt;/strong&gt;: Investigation methodologies can be analyzed and optimized&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;AI Training&lt;/strong&gt;: CDD documents become high-quality training data for improving AI assistants&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Tools and Technology&lt;/h2&gt;
+&lt;h3&gt;Current Implementation&lt;/h3&gt;
+&lt;p&gt;The methodology can be implemented with basic tools:
+- &lt;strong&gt;Markdown editors&lt;/strong&gt; with YAML frontmatter support
+- &lt;strong&gt;Git repositories&lt;/strong&gt; for versioning and cross-referencing
+- &lt;strong&gt;Search indexing&lt;/strong&gt; for topic-based discovery
+- &lt;strong&gt;Template systems&lt;/strong&gt; for consistent structure&lt;/p&gt;
+&lt;h3&gt;Future Enhancements&lt;/h3&gt;
+&lt;p&gt;More sophisticated tooling could provide:
+- &lt;strong&gt;Interactive notebooks&lt;/strong&gt; that combine documentation with executable analysis
+- &lt;strong&gt;Semantic search&lt;/strong&gt; across investigation archives
+- &lt;strong&gt;Automated hypothesis tracking&lt;/strong&gt; and evidence correlation
+- &lt;strong&gt;Integration with observability platforms&lt;/strong&gt; (Logfire, DataDog, etc.)&lt;/p&gt;
+&lt;h2&gt;Research Implications&lt;/h2&gt;
+&lt;p&gt;CDD represents a shift from &lt;strong&gt;artifact-centered&lt;/strong&gt; to &lt;strong&gt;process-centered&lt;/strong&gt; technical documentation. This has implications for:&lt;/p&gt;
+&lt;h3&gt;Software Engineering Research&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;New metrics for measuring collaborative debugging effectiveness&lt;/li&gt;
+&lt;li&gt;Studies of human-AI knowledge transfer patterns&lt;/li&gt;
+&lt;li&gt;Analysis of investigation strategy evolution over time&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;AI Development&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Training data for improving technical reasoning capabilities&lt;/li&gt;
+&lt;li&gt;Understanding optimal human-AI collaboration patterns&lt;/li&gt;
+&lt;li&gt;Developing AI agents specialized in technical investigation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Knowledge Management&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Processes for converting tacit investigation skills into explicit knowledge&lt;/li&gt;
+&lt;li&gt;Techniques for building institutional memory around complex technical domains&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Challenges and Limitations&lt;/h2&gt;
+&lt;h3&gt;Documentation Overhead&lt;/h3&gt;
+&lt;p&gt;CDD requires more effort than informal debugging sessions. Teams need to balance documentation value against time investment.&lt;/p&gt;
+&lt;h3&gt;Consistency Challenges&lt;/h3&gt;
+&lt;p&gt;Without tooling support, maintaining consistent structure and metadata across team members and sessions can be difficult.&lt;/p&gt;
+&lt;h3&gt;Context Sensitivity&lt;/h3&gt;
+&lt;p&gt;The methodology works best for complex, novel problems. Routine issues may not justify the documentation overhead.&lt;/p&gt;
+&lt;h3&gt;Tool Integration&lt;/h3&gt;
+&lt;p&gt;Current tooling requires manual effort. Better integration with debugging workflows, observability platforms, and AI assistants would improve adoption.&lt;/p&gt;
+&lt;h2&gt;Future Directions&lt;/h2&gt;
+&lt;h3&gt;Automated Support&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Session detection&lt;/strong&gt;: Automatically identifying when debugging interactions should become CDD documents&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Template generation&lt;/strong&gt;: Pre-populating document structure based on context&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cross-reference suggestions&lt;/strong&gt;: Identifying related sessions and resources&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Evidence extraction&lt;/strong&gt;: Automatically pulling relevant logs, code, and traces&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Collaborative Platforms&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Real-time co-editing&lt;/strong&gt; for multi-person investigation sessions&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Branching investigations&lt;/strong&gt; for exploring multiple hypotheses simultaneously&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Integration with development tools&lt;/strong&gt; (IDEs, terminals, observability dashboards)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;AI Enhancement&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Investigation assistants&lt;/strong&gt; trained specifically on CDD methodology&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pattern recognition&lt;/strong&gt; across investigation archives&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Proactive hypothesis generation&lt;/strong&gt; based on historical similar issues&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Collaborative Diagnostic Documentation emerges from the reality of modern software development: complex systems require collaborative investigation, and AI assistants are becoming essential partners in technical problem-solving. By treating the investigation process as a first-class artifact, CDD enables organizations to capture, share, and improve their collective problem-solving capabilities.&lt;/p&gt;
+&lt;p&gt;The methodology is still evolving, with early adopters developing practices organically. As the software industry continues integrating AI assistants into development workflows, CDD provides a structured approach to maximizing the value of human-AI collaboration while building institutional knowledge that survives beyond individual sessions and team members.&lt;/p&gt;
+&lt;p&gt;The examples analyzed here represent early instances of this emerging practice. As teams recognize the value of structured collaborative investigation, we can expect to see tooling, standards, and methodologies develop to support CDD as a formal software engineering discipline.&lt;/p&gt;
+&lt;p&gt;For organizations serious about leveraging AI assistance while maintaining institutional knowledge, Collaborative Diagnostic Documentation offers a path forward that honors both the power of collaborative reasoning and the necessity of persistent knowledge capture.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;em&gt;This analysis is based on real-world debugging sessions from the AiOx project, demonstrating how novel documentation methodologies emerge organically from new collaborative workflows. The techniques described here represent observed practices that could benefit from formal study and tool development.&lt;/em&gt;&lt;/p&gt;</content></entry><entry><title>making python packages the modern way</title><link href="https://mwartell.github.io/modern-python-packages.html" rel="alternate"></link><published>2025-01-29T00:00:00-05:00</published><updated>2025-01-29T00:00:00-05:00</updated><author><name>matt wartell</name></author><id>tag:mwartell.github.io,2025-01-29:/modern-python-packages.html</id><summary type="html">making python packages the modern way</summary><content type="html">&lt;p&gt;Although the [uv package and project management tool][uv] has been taking the Python
 community by storm, I&amp;rsquo;ve found its documentation to be annoying incomplete. This
 is the first in a series of notes that I&amp;rsquo;m writing to address some places of chronic
 misunderstandings I&amp;rsquo;ve seen in the community.&lt;/p&gt;
@@ -48,7 +255,7 @@ will just get an &lt;code&gt;ImportError&lt;/code&gt; when you try to import you
 
 &lt;p&gt;You can confirm that &lt;code&gt;uv&lt;/code&gt; has installed your package with&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv pip list | grep octavius
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></entry><entry><title>a plea for better developmer documentation</title><link href="https://mwartell.github.io/plea-for-better-docs.html" rel="alternate"></link><published>2024-12-04T00:00:00-05:00</published><updated>2024-12-04T00:00:00-05:00</updated><author><name>matt wartell</name></author><id>tag:mwartell.github.io,2024-12-04:/plea-for-better-docs.html</id><summary type="html">a plea for better developmer documentation</summary><content type="html">&lt;p&gt;This notion has been in my head for years, but seeing the instructions for
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></entry><entry><title>a plea for better developer documentation</title><link href="https://mwartell.github.io/plea-for-better-docs.html" rel="alternate"></link><published>2024-12-04T00:00:00-05:00</published><updated>2024-12-04T00:00:00-05:00</updated><author><name>matt wartell</name></author><id>tag:mwartell.github.io,2024-12-04:/plea-for-better-docs.html</id><summary type="html">a plea for better developer documentation</summary><content type="html">&lt;p&gt;This notion has been in my head for years, but seeing the instructions for
 Installing &lt;a href="https://www.rust-lang.org/tools/install"&gt;Rust&lt;/a&gt; on Linix made me
 want to write this down.&lt;/p&gt;
 &lt;p&gt;The cut-and-paste instructions are&lt;/p&gt;

@@ -1,5 +1,5 @@
 ---
-title: a plea for better developmer documentation
+title: a plea for better developer documentation
 category: docs
 date: 2024-12-04
 ---
