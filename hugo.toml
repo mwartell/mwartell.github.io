@@ -2,15 +2,15 @@ baseURL = "https://mwartell.github.io/"
 languageCode = "en-us"
 title = "mwartell maladies"
 
+# Output to docs/ for GitHub Pages
+publishDir = "docs"
+
 [params]
 description = "the fourth most influential blog in the galaxy…"
 author = "matt wartell"
 
 [outputs]
 home = ["HTML", "RSS"]
-
-# Output to docs/ for GitHub Pages
-publishDir = "docs"
 
 [markup]
 [markup.goldmark]

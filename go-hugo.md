@@ -2,14 +2,16 @@
 
 ## Migration Status
 
-**Phases Completed: 1-4** ✅ (2026-01-26)
+**Phases Completed: 1-7** ✅ (2026-01-26)
 - Hugo v0.154.5 installed and configured
 - All Jinja2 templates converted to Hugo Go templates
 - All content migrated with updated frontmatter
-- Site successfully builds (22 pages generated)
-- Test server verified working at http://localhost:8220/
+- Static assets consolidated (14 files in static/)
+- Build process updated (justfile + .gitignore)
+- Site successfully builds (22 pages, 14 static files)
+- No warnings or errors
 
-**Next Steps:** Phase 5-9 (static assets, cleanup, final verification)
+**Next Steps:** Phase 8-9 (cleanup, final verification)
 
 ---
 
@@ -198,36 +200,42 @@ Hugo requires either a theme or custom layouts. We'll create minimal custom layo
 
 ---
 
-### Phase 5: Migrate Static Assets
+### Phase 5: Migrate Static Assets ✅
 
-- [ ] **5.1** Move CSS files
+> **Completed 2026-01-26**: CSS files already in correct location. Copied all favicon files from `favicon/` to `static/`. Hugo now serves 14 static files.
+
+- [x] **5.1** Move CSS files
   - `static/style.css` → `static/style.css` (same location, Hugo uses same convention)
   - `static/code-dark.css` → `static/code-dark.css`
   - `static/code-light.css` → `static/code-light.css`
 
-- [ ] **5.2** Move favicon files
+- [x] **5.2** Move favicon files
   - Move contents of `favicon/` to `static/`
   - Update paths in templates if needed
 
 ---
 
-### Phase 6: Configure Taxonomies
+### Phase 6: Configure Taxonomies ✅
 
-- [ ] **6.1** Add taxonomy configuration to `hugo.toml`
+> **Completed 2026-01-26**: Taxonomy configuration was completed in Phase 2. Templates created in Phase 3.
+
+- [x] **6.1** Add taxonomy configuration to `hugo.toml`
   ```toml
   [taxonomies]
     tag = "tags"
   ```
 
-- [ ] **6.2** Create taxonomy templates
+- [x] **6.2** Create taxonomy templates
   - `layouts/_default/terms.html` - Tags index page
   - `layouts/_default/term.html` - Individual tag page
 
 ---
 
-### Phase 7: Update Build Process
+### Phase 7: Update Build Process ✅
 
-- [ ] **7.1** Update `justfile`
+> **Completed 2026-01-26**: Updated `justfile` with Hugo commands (build, serve, clean). Added Hugo-specific entries to `.gitignore`. Fixed publishDir config warning.
+
+- [x] **7.1** Update `justfile`
   ```makefile
   # Build the static site
   build:
@@ -242,10 +250,11 @@ Hugo requires either a theme or custom layouts. We'll create minimal custom layo
       rm -rf docs/*
   ```
 
-- [ ] **7.2** Update `.gitignore` (if needed)
+- [x] **7.2** Update `.gitignore` (if needed)
   ```
   resources/
   .hugo_build.lock
+  public/
   ```
 
 ---

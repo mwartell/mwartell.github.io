@@ -1,7 +1,11 @@
 # Build the static site
 build:
-    uv run blag build --output-dir docs
+    hugo --minify
 
-# Serve the site locally on port 8000
+# Serve the site locally with live reload
 serve:
-    cd docs && python -m http.server 8220
+    hugo server -D --port 8220
+
+# Clean build output
+clean:
+    rm -rf docs/*
