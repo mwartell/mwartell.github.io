@@ -336,11 +336,6 @@ has been present to clear the screen. To use it, press&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;Ctrl-L
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;or, on macOS, I guess,&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;⌘-L
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;that&amp;rsquo;s the Control or Command key along with the letter L.&lt;/p&gt;
 &lt;p&gt;The historically minded will remember that Ctrl-L is the ␌
 ASCII form-feed character that would eject a page when sent
 to a Teletype.&lt;/p&gt;</content></entry></feed>
