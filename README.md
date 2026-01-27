@@ -83,8 +83,6 @@ brew install hugo just
    just serve
    ```
 
-   Then open http://localhost:8220 in your browser.
-
 The generated site will be in the `docs/` directory, ready for GitHub Pages deployment.
 
 ## Build Commands
@@ -95,14 +93,6 @@ just build   # Build the site with minification
 just serve   # Start local development server with live reload
 just clean   # Clean the output directory
 ```
-
-Or using Hugo directly:
-```bash
-hugo --minify                    # Build
-hugo server -D --port 8220       # Serve locally
-rm -rf docs/*                    # Clean
-```
-
 ## Adding New Content
 
 ### Blog Posts
