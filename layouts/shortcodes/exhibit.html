@@ -1,0 +1,6 @@
+{{ $name := .Get 0 }}
+{{ with $.Page.Resources.GetMatch $name }}
+  {{ .Content }}
+{{ else }}
+  {{ errorf "The %q shortcode could not find exhibit resource %q. See %s" $.Name $name $.Position }}
+{{ end }}

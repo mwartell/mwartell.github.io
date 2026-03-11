@@ -253,11 +253,19 @@ For organizations serious about leveraging AI assistance while maintaining insti
 
 The following exhibits demonstrate the CDD methodology in practice through actual debugging sessions from the AiOx project:
 
-- **[Exhibit A: Bedrock Input Error Handling](../collaborative-development-docs-exhibit-1/)** - Initial investigation of a Bedrock API validation error, demonstrating hypothesis formation, evidence analysis, and collaborative problem-solving that identified a message format conversion issue.
+- **Exhibit A: Bedrock Input Error Handling** - Initial investigation of a Bedrock API validation error, demonstrating hypothesis formation, evidence analysis, and collaborative problem-solving that identified a message format conversion issue.
 
-- **[Exhibit B: Bedrock Input Error Handling - Take 2](../collaborative-development-docs-exhibit-2/)** - Continuation session showing explicit knowledge handoff, where the AI reconstructed context from the previous session's documentation and discovered a second, related issue in the message processing pipeline.
+- **Exhibit B: Bedrock Input Error Handling - Take 2** - Continuation session showing explicit knowledge handoff, where the AI reconstructed context from the previous session's documentation and discovered a second, related issue in the message processing pipeline.
 
 These complete, unedited session documents illustrate the structured prompt-response pattern, evidence-first reasoning, and iterative continuity that characterize the CDD approach.
+
+### Exhibit A: Bedrock Input Error Handling
+
+{{< exhibit "exhibit-1.md" >}}
+
+### Exhibit B: Bedrock Input Error Handling - Take 2
+
+{{< exhibit "exhibit-2.md" >}}
 
 ---
 

@@ -7,8 +7,6 @@ topics:
   - bedrock
   - error_diagnosis
 agent: Copilot Claude Opus 4.5
-build:
-  list: false
 ---
 
 This is a diagnostic investigation into an error encountered when using Prima-Code with Bedrock models. There is a developer prompt followed buy the Copilot's analysis.

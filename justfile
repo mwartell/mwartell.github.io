@@ -8,7 +8,7 @@ serve:
 
 # Clean build output
 clean:
-    rm -rf docs/*
+    rm -rf public/*
 
 # Install test dependencies
 install:
