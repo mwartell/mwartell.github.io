@@ -7,5 +7,8 @@
         "titleBar.activeForeground": "#ffffff",
         "titleBar.inactiveForeground": "#ffffff",
         "activityBar.foreground": "#ffffff"
-    }
+    },
+    "cSpell.words": [
+        "frontmatter"
+    ]
 }

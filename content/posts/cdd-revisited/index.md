@@ -6,11 +6,11 @@ tags: ["agentic development"]
 draft: false
 ---
 
-In January I wrote about [Collaborative Development Documentation](/posts/collaborative-development-docs/) — a structured way to capture the back-and-forth of human-AI technical work. Since then I've written about twenty CDDs across a real project, and the practice has evolved considerably. The structural ideas from that first post still hold, but the interesting part turned out to be something I barely mentioned: *how you think* when you're writing the prompts.
+In January I wrote about [Collaborative Development Documentation](/posts/collaborative-development-docs/) — a structured way to capture the back-and-forth of human-AI technical work. Since then I've written about many CDDs across real projects, and my practice has evolved considerably. The structural ideas from that first post still hold, but the interesting part turned out to be something I barely mentioned: *how I think* when I'm writing the prompts.
 
 ## what a CDD actually looks like in practice
 
-The bones are the same: a markdown file with YAML frontmatter, organized as numbered Prompt/Response pairs. But the frontmatter has simplified. Here's a typical header:
+The bones are the same: a markdown file with YAML frontmatter, organized as numbered Prompt/Response sections. Here's a typical header:
 
 ```yaml
 ---
@@ -18,7 +18,6 @@ date: 2026-02-18
 title: fixing field mismatches
 current_head: a1b2c3d
 agent: Copilot Claude Sonnet 4.5
-session_type:
 instructions: _cdd-instructions.md
 topics: [cip, schema, pydantic]
 ---
@@ -28,14 +27,13 @@ The `instructions` field points to a shared file that tells the agent how to for
 
 I also built two VS Code prompt files to reduce friction:
 
-- **cdd-start.prompt.md** scaffolds a new CDD — it creates the file with proper frontmatter, names it by date and topic, and drops in a placeholder for the first prompt. One command to start a new session.
-- **cdd.prompt.md** dispatches to a specific prompt number in an existing CDD. When I type `/cdd 3`, the agent reads the instructions file, finds Prompt 3, and executes it. The CDD becomes a script I can run step by step.
+`cdd-start.prompt.md` scaffolds a new CDD — it creates the file with proper frontmatter, names it by date and topic, and drops in a placeholder for the first prompt. One command to start a new session. I started the example above with `/cdd-start fixing field matches`
 
-This matters because it collapses the ceremony. Starting a collaborative session is as easy as starting a conversation.
+`cdd.prompt.md` dispatches to a specific prompt number in an existing CDD. When I type `/cdd 3`, the agent reads the instructions file, finds Prompt 3, and executes it. The CDD becomes a script I can run step by step.
 
 ## the real subject: how to think in prompts
 
-The structure was always just scaffolding. What I actually learned over twenty sessions is a set of thinking habits for writing effective prompts. These aren't about prompt engineering tricks — they're about the quality of thought you bring to the collaboration.
+The structure was always just scaffolding. What I actually learned over a few months of use is a set of thinking habits for writing effective prompts. These aren't about prompt engineering tricks — they're about the quality of thought you bring to the collaboration.
 
 ### give context before asking questions
 
@@ -104,13 +102,13 @@ When a situation has multiple valid interpretations, don't pick one and hope —
 
 This prevents the agent from silently choosing an interpretation and building on a possibly wrong assumption. It also documents your thinking for anyone who reads the CDD later.
 
-## what emerged over twenty sessions
+## reviewing my use of CDDs
 
-Looking across the corpus, I can see a clear arc. Early sessions were exploratory: "evaluate these rules," "what does this data mean?" The prompts were broad and the agents would sometimes wander.
+Looking across the CDDs for a project, I can see a clear arc. Early sessions were exploratory: "evaluate these rules," "what does this data mean?" The prompts were broad and the agents would sometimes wander.
 
-By the middle sessions, prompts became specification-anchored: "validate this schema against the authoritative data elements CSV." Every claim had to be grounded in a concrete artifact.
+By the middle sessions, my prompts became specification-anchored: "validate this schema against the authoritative data elements CSV." Every claim had to be grounded in a concrete artifact.
 
-By the late sessions, the prompts were building *reproducible processes*: "create a detailed prompt for regenerating Pydantic models from the schema, then use your subagent tool to execute it." The human was teaching the agent a methodology, not solving a one-off problem.
+By the late sessions, my prompts were building *reproducible processes*: "create a detailed prompt for regenerating Pydantic models from the schema, then use your subagent tool to execute it." I was teaching the agent a methodology, not solving a one-off problem.
 
 The pattern: **discovery → specification → automation**. Each phase's CDDs built explicitly on the previous phase's findings. The documents weren't just records — they were the connective tissue of the project.
 
@@ -120,7 +118,7 @@ The original CDD post focused on the *what*: frontmatter, prompt-response struct
 
 These are thinking habits, not formatting rules. They work because they force the human side of the collaboration to be precise — which, more than any structural innovation, is what makes the agent side useful.
 
-## the annotated exemplar
+## an annotated example
 
 The CDD from which most of the examples in this post were drawn — *fixing field mismatches* (2026-02-18) — is annotated below. Each annotation calls out the thinking habit at work. It also includes a few moments not in the main text: a one-sentence failure response, and a final pivot from "what did you build?" to "why did you build it that way?"
 

@@ -3,76 +3,6 @@ title: "annotated exemplar: fixing field mismatches"
 cdd_source: "cdd-corpus/2026-02-18-fixing-field-mismatches.md"
 ---
 
-Of the twenty CDDs in the corpus, this one demonstrates all seven thinking habits from the main post. Here's a map before the walkthrough:
-
-| Pattern | Where it appears |
-|---|---|
-| **give context before asking questions** | Prompt 1 opens with the testing context, the specific failure, and a table of evidence before posing the question |
-| **anchor on authoritative sources** | `data_elements.csv` is explicitly named "absolutely authoritative"; Response 1 traces every mismatch to a specific spec line number |
-| **constrain scope explicitly** | Prompt 2 demands explicit guardrails and names five of them; those constraints travel with the generated agent definition into Prompt 4 |
-| **build on prior work explicitly** | Prompt 4 invokes the `pydantic-model-generator` agent created in Prompt 3; Response 4 validates against earlier test data |
-| **ask the agent to show its work** | Prompt 5 asks directly: "why did that happen?" — pivoting from the work product to the reasoning process |
-| **iterate toward simplicity** | Prompt 3 creates a special-purpose prompt → Prompt 4 reuses it → Response 5 proposes replacing the whole approach with permanent tools |
-| **document the fork points** | Response 5 lays out "use subagents when / use permanent tools when" as explicit decision criteria rather than advocating one path |
-
-The session also shows something not in the original list: **honest failure documentation**. Response 3 is two sentences. The agent got stuck; the human fixed the environment and moved on. In CDD format, that's a valid response.
-
----
-
-## annotating CDDs in Hugo
-
-A CDD in its raw form is a flat document: prompts and responses in sequence. An annotated walkthrough needs a visual layer that separates "this is the CDD" from "this is commentary about the CDD."
-
-Hugo provides a natural mechanism: a paired shortcode that wraps annotation content in a styled aside.
-
-**`layouts/shortcodes/annotation.html`:**
-
-```html
-<aside class="annotation">
-  {{- with .Get 0 }}<span class="annotation-label">{{ . }}</span>{{ end }}
-  {{ .Inner | markdownify }}
-</aside>
-```
-
-**Usage in a page:**
-
-```
-{{</* annotation "give context before asking questions" */>}}
-The prompt establishes the testing context, names the failing module,
-and presents a table of evidence — all before asking the question.
-{{</* /annotation */>}}
-```
-
-**CSS to add to `static/style.css`:**
-
-```css
-aside.annotation {
-    background: var(--background-dim);
-    border-left: 3px solid var(--primary-color);
-    border-radius: 0.3rem;
-    padding: 0.75rem 1rem;
-    margin: 1.5rem 0;
-    font-size: 0.9rem;
-    font-style: normal;
-    color: var(--foreground);
-}
-
-aside.annotation .annotation-label {
-    display: block;
-    font-weight: bold;
-    color: var(--primary-color);
-    font-family: "Enriqueta", serif;
-    margin-bottom: 0.5rem;
-}
-```
-
-> **Note on exhibits:** Hugo shortcodes are not processed inside page bundle resource files — the mechanism used for these exhibits. The annotated CDD below uses equivalent inline HTML `<aside>` elements. In a page that owns its content directly (an `index.md` or standalone post), the shortcode form above works as written.
-
----
-
-## exhibit: fixing field mismatches
-
-*CDD session · 2026-02-18 · agent: Copilot Claude Sonnet 4.5*
 
 ```yaml
 ---
@@ -91,7 +21,6 @@ topics: [pydantic, schema, cip, field-naming, model-generation]
 <code>current_head</code> records the exact git commit the agent was working from, making the session reproducible. <code>instructions</code> delegates response-formatting rules to a shared file, keeping boilerplate out of the CDD itself. Together these two fields answer: "what was the agent looking at, and what were the rules of engagement?"
 </aside>
 
----
 
 ### Prompt 1: understanding the issue
 
