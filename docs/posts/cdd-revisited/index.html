@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="author" content="matt wartell">
+    <meta name="description" content="the fourth most influential blog in the galaxy…">
+    <link rel="alternate" href="/index.xml" type="application/atom+xml">
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&family=Enriqueta&family=Lato&display=swap" rel="stylesheet">
+    <title>collaborative development docs revisited | the fourth most influential blog in the galaxy…</title>
+  </head>
+
+  <body>
+    <header>
+      <h1><a href="/">mwartell maladies</a></h1>
+      <nav>
+        <h2>the fourth most influential blog in the galaxy…</h2>
+        <ul>
+          <li><h2><a href="/">Blog</a></h2></li>
+          
+          <li><h2><a href="/tags/">Tags</a></h2></li>
+          <li><h2><a href="/about/">About Me</a></h2></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+    
+
+  
+  <h2>collaborative development docs revisited</h2>
+  
+
+  <aside>
+    <p>published on 2026-03-11
+
+    
+    · tagged with
+      
+      
+        <a href="/tags/agentic-development/">#agentic development</a>
+    
+    </p>
+  </aside>
+
+  <p>In January I wrote about <a href="/posts/collaborative-development-docs/">Collaborative Development Documentation</a> — a structured way to capture the back-and-forth of human-AI technical work. Since then I&rsquo;ve written about twenty CDDs across a real project, and the practice has evolved considerably. The structural ideas from that first post still hold, but the interesting part turned out to be something I barely mentioned: <em>how you think</em> when you&rsquo;re writing the prompts.</p>
+<h2 id="what-a-cdd-actually-looks-like-in-practice">what a CDD actually looks like in practice</h2>
+<p>The bones are the same: a markdown file with YAML frontmatter, organized as numbered Prompt/Response pairs. But the frontmatter has simplified. Here&rsquo;s a typical header:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">date</span>: <span style="color:#e6db74">2026-02-18</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">title</span>: <span style="color:#ae81ff">fixing field mismatches</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">current_head</span>: <span style="color:#ae81ff">a1b2c3d</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">agent</span>: <span style="color:#ae81ff">Copilot Claude Sonnet 4.5</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">session_type</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">instructions</span>: <span style="color:#ae81ff">_cdd-instructions.md</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">topics</span>: [<span style="color:#ae81ff">cip, schema, pydantic]</span>
+</span></span><span style="display:flex;"><span>---
+</span></span></code></pre></div><p>The <code>instructions</code> field points to a shared file that tells the agent how to format responses — where to put the Response header, how to confirm it read the instructions. This keeps the CDD itself clean. The <code>current_head</code> anchors the session to a specific point in the codebase, so you can reconstruct what the agent was looking at.</p>
+<p>I also built two VS Code prompt files to reduce friction:</p>
+<ul>
+<li><strong>cdd-start.prompt.md</strong> scaffolds a new CDD — it creates the file with proper frontmatter, names it by date and topic, and drops in a placeholder for the first prompt. One command to start a new session.</li>
+<li><strong>cdd.prompt.md</strong> dispatches to a specific prompt number in an existing CDD. When I type <code>/cdd 3</code>, the agent reads the instructions file, finds Prompt 3, and executes it. The CDD becomes a script I can run step by step.</li>
+</ul>
+<p>This matters because it collapses the ceremony. Starting a collaborative session is as easy as starting a conversation.</p>
+<h2 id="the-real-subject-how-to-think-in-prompts">the real subject: how to think in prompts</h2>
+<p>The structure was always just scaffolding. What I actually learned over twenty sessions is a set of thinking habits for writing effective prompts. These aren&rsquo;t about prompt engineering tricks — they&rsquo;re about the quality of thought you bring to the collaboration.</p>
+<h3 id="give-context-before-asking-questions">give context before asking questions</h3>
+<p>The single most consistent pattern across every effective CDD prompt: provide the situation <em>first</em>, then ask the question. Not &ldquo;fix this bug&rdquo; but:</p>
+<blockquote>
+<p>While creating and testing the backwards ingestion module, we found surprising mismatches between the generated models and the authoritative schema. Here are the mismatches: [table]. Look at the mismatches and determine where in the process the differences were introduced.</p>
+</blockquote>
+<p>The context does three things: it limits the search space, it gives the agent your mental model, and it tells the agent what you already know so it doesn&rsquo;t waste time explaining it back to you.</p>
+<h3 id="anchor-on-authoritative-sources">anchor on authoritative sources</h3>
+<p>Early in my CDD practice I would ask things like &ldquo;is X correct?&rdquo; and get plausible-sounding answers that were sometimes wrong. The fix was to stop asking for opinions and start asking for evidence:</p>
+<blockquote>
+<p>The tdata files and the ogma files were created independently by two different engineers working from the same T-MSIS spec. Gather ALL INFORMATION YOU CAN to support or reject that the sign indicator is needed. I need evidence from the T-MSIS spec itself.</p>
+</blockquote>
+<p>This transforms the agent from an answerer into a researcher. When the spec says the field is 13 positions, not 14, that&rsquo;s not an opinion — it&rsquo;s a fact you can build on. The agent found definitive proof that one implementation was wrong, not by reasoning about it but by reading the specification.</p>
+<p>Anchor on specs, schemas, and other authoritative artifacts. Make the agent show its work.</p>
+<h3 id="constrain-scope-explicitly">constrain scope explicitly</h3>
+<p>I documented seven categories of agent failure early on — duplicate work, unnecessary changes, incomplete analysis, introduced bugs, destructive actions. The common thread: the agent did more than was asked.</p>
+<p>The defense is explicit constraints:</p>
+<ul>
+<li>&ldquo;This program should stop if it hits 10 invalid files.&rdquo;</li>
+<li>&ldquo;Minimize query summaries. Drop the statistical queries entirely.&rdquo;</li>
+<li>&ldquo;No changes except field names.&rdquo;</li>
+</ul>
+<p>Without these, agents optimize for appearing helpful, which often means doing too much. A good prompt is like a good function signature: it specifies what&rsquo;s in scope and what isn&rsquo;t.</p>
+<h3 id="build-on-prior-work-explicitly">build on prior work explicitly</h3>
+<p>CDDs are sequential documents, but agents don&rsquo;t automatically carry forward the full context of previous responses. When your next prompt depends on earlier work, say so:</p>
+<blockquote>
+<p>In the course of working CDD 2026-02-09-datarules-subagent.md and 2026-02-09-fact-sales-daily-float-evaluation.md, you generated a set of query evaluations. Start from that set.</p>
+</blockquote>
+<blockquote>
+<p>We now have ingested the sample data from Response 2. The nuna_rules/RULE_1_v001.java looks for agreement between fields&hellip;</p>
+</blockquote>
+<p>This creates a traceable chain. Anyone reading the CDD later can follow the thread. And the agent knows exactly what prior state to build from rather than guessing.</p>
+<h3 id="ask-the-agent-to-show-its-work">ask the agent to show its work</h3>
+<p>One of the most productive prompt patterns I discovered was asking the agent <em>how</em> it did something, not just <em>what</em> it did:</p>
+<blockquote>
+<p>You seemed to have added Response 2 without problems. Tell me what mechanism you used and if you think the additional guidance helped.</p>
+</blockquote>
+<p>This catches the difference between an agent that understands a solution and one that got lucky. It also produces documentation of the method, which is useful when the same pattern needs to be repeated.</p>
+<h3 id="iterate-toward-simplicity">iterate toward simplicity</h3>
+<p>My best sessions follow a four-beat pattern: ask for a solution, examine it, ask for simplification, verify. One session went:</p>
+<ol>
+<li>Generated ~70 lines of technical guidance</li>
+<li>&ldquo;The guidance is awfully verbose. Make it fit your needs.&rdquo;</li>
+<li>Condensed to ~25 lines</li>
+<li>&ldquo;The dependence on Tagalog text shouldn&rsquo;t be necessary. Update accordingly.&rdquo;</li>
+</ol>
+<p>Each step applies pressure that tests real understanding. An agent that can simplify its own output without losing correctness actually understands the problem. Conciseness is a test of comprehension.</p>
+<h3 id="document-the-fork-points">document the fork points</h3>
+<p>When a situation has multiple valid interpretations, don&rsquo;t pick one and hope — lay them out:</p>
+<blockquote>
+<p>Either: (1) The S9 fields should actually be unsigned 9 fields and the schema is wrong, OR (2) The sign indicator is needed and the test data is wrong. Gather evidence.</p>
+</blockquote>
+<p>This prevents the agent from silently choosing an interpretation and building on a possibly wrong assumption. It also documents your thinking for anyone who reads the CDD later.</p>
+<h2 id="what-emerged-over-twenty-sessions">what emerged over twenty sessions</h2>
+<p>Looking across the corpus, I can see a clear arc. Early sessions were exploratory: &ldquo;evaluate these rules,&rdquo; &ldquo;what does this data mean?&rdquo; The prompts were broad and the agents would sometimes wander.</p>
+<p>By the middle sessions, prompts became specification-anchored: &ldquo;validate this schema against the authoritative data elements CSV.&rdquo; Every claim had to be grounded in a concrete artifact.</p>
+<p>By the late sessions, the prompts were building <em>reproducible processes</em>: &ldquo;create a detailed prompt for regenerating Pydantic models from the schema, then use your subagent tool to execute it.&rdquo; The human was teaching the agent a methodology, not solving a one-off problem.</p>
+<p>The pattern: <strong>discovery → specification → automation</strong>. Each phase&rsquo;s CDDs built explicitly on the previous phase&rsquo;s findings. The documents weren&rsquo;t just records — they were the connective tissue of the project.</p>
+<h2 id="the-meta-lesson">the meta-lesson</h2>
+<p>The original CDD post focused on the <em>what</em>: frontmatter, prompt-response structure, cross-session references. The practice taught me the <em>how</em>: think before you prompt. Provide context. Anchor on facts. Constrain scope. Build chains. Ask for evidence, not opinions. Iterate toward clarity.</p>
+<p>These are thinking habits, not formatting rules. They work because they force the human side of the collaboration to be precise — which, more than any structural innovation, is what makes the agent side useful.</p>
+<h2 id="the-annotated-exemplar">the annotated exemplar</h2>
+<p>The CDD from which most of the examples in this post were drawn — <em>fixing field mismatches</em> (2026-02-18) — is annotated below. Each annotation calls out the thinking habit at work. It also includes a few moments not in the main text: a one-sentence failure response, and a final pivot from &ldquo;what did you build?&rdquo; to &ldquo;why did you build it that way?&rdquo;</p>
+
+
+  <p>Of the twenty CDDs in the corpus, this one demonstrates all seven thinking habits from the main post. Here&rsquo;s a map before the walkthrough:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Pattern</th>
+          <th>Where it appears</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>give context before asking questions</strong></td>
+          <td>Prompt 1 opens with the testing context, the specific failure, and a table of evidence before posing the question</td>
+      </tr>
+      <tr>
+          <td><strong>anchor on authoritative sources</strong></td>
+          <td><code>data_elements.csv</code> is explicitly named &ldquo;absolutely authoritative&rdquo;; Response 1 traces every mismatch to a specific spec line number</td>
+      </tr>
+      <tr>
+          <td><strong>constrain scope explicitly</strong></td>
+          <td>Prompt 2 demands explicit guardrails and names five of them; those constraints travel with the generated agent definition into Prompt 4</td>
+      </tr>
+      <tr>
+          <td><strong>build on prior work explicitly</strong></td>
+          <td>Prompt 4 invokes the <code>pydantic-model-generator</code> agent created in Prompt 3; Response 4 validates against earlier test data</td>
+      </tr>
+      <tr>
+          <td><strong>ask the agent to show its work</strong></td>
+          <td>Prompt 5 asks directly: &ldquo;why did that happen?&rdquo; — pivoting from the work product to the reasoning process</td>
+      </tr>
+      <tr>
+          <td><strong>iterate toward simplicity</strong></td>
+          <td>Prompt 3 creates a special-purpose prompt → Prompt 4 reuses it → Response 5 proposes replacing the whole approach with permanent tools</td>
+      </tr>
+      <tr>
+          <td><strong>document the fork points</strong></td>
+          <td>Response 5 lays out &ldquo;use subagents when / use permanent tools when&rdquo; as explicit decision criteria rather than advocating one path</td>
+      </tr>
+  </tbody>
+</table>
+<p>The session also shows something not in the original list: <strong>honest failure documentation</strong>. Response 3 is two sentences. The agent got stuck; the human fixed the environment and moved on. In CDD format, that&rsquo;s a valid response.</p>
+<hr>
+<h2 id="annotating-cdds-in-hugo">annotating CDDs in Hugo</h2>
+<p>A CDD in its raw form is a flat document: prompts and responses in sequence. An annotated walkthrough needs a visual layer that separates &ldquo;this is the CDD&rdquo; from &ldquo;this is commentary about the CDD.&rdquo;</p>
+<p>Hugo provides a natural mechanism: a paired shortcode that wraps annotation content in a styled aside.</p>
+<p><strong><code>layouts/shortcodes/annotation.html</code>:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">aside</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;annotation&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>  {{- with .Get 0 }}&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;annotation-label&#34;</span>&gt;{{ . }}&lt;/<span style="color:#f92672">span</span>&gt;{{ end }}
+</span></span><span style="display:flex;"><span>  {{ .Inner | markdownify }}
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">aside</span>&gt;
+</span></span></code></pre></div><p><strong>Usage in a page:</strong></p>
+<pre tabindex="0"><code>{{&lt; annotation &#34;give context before asking questions&#34; &gt;}}
+The prompt establishes the testing context, names the failing module,
+and presents a table of evidence — all before asking the question.
+{{&lt; /annotation &gt;}}
+</code></pre><p><strong>CSS to add to <code>static/style.css</code>:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-css" data-lang="css"><span style="display:flex;"><span><span style="color:#f92672">aside</span>.<span style="color:#a6e22e">annotation</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">background</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>background<span style="color:#f92672">-</span>dim);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">border-left</span>: <span style="color:#ae81ff">3</span><span style="color:#66d9ef">px</span> <span style="color:#66d9ef">solid</span> <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>primary<span style="color:#f92672">-</span><span style="color:#66d9ef">color</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">border-radius</span>: <span style="color:#ae81ff">0.3</span><span style="color:#66d9ef">rem</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0.75</span><span style="color:#66d9ef">rem</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">rem</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">1.5</span><span style="color:#66d9ef">rem</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">font-size</span>: <span style="color:#ae81ff">0.9</span><span style="color:#66d9ef">rem</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">font-style</span>: <span style="color:#66d9ef">normal</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">color</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>foreground);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">aside</span>.<span style="color:#a6e22e">annotation</span> .<span style="color:#a6e22e">annotation-label</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">block</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">font-weight</span>: <span style="color:#66d9ef">bold</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">color</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>primary<span style="color:#f92672">-</span><span style="color:#66d9ef">color</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">font-family</span>: <span style="color:#e6db74">&#34;Enriqueta&#34;</span>, <span style="color:#66d9ef">serif</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">margin-bottom</span>: <span style="color:#ae81ff">0.5</span><span style="color:#66d9ef">rem</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<p><strong>Note on exhibits:</strong> Hugo shortcodes are not processed inside page bundle resource files — the mechanism used for these exhibits. The annotated CDD below uses equivalent inline HTML <code>&lt;aside&gt;</code> elements. In a page that owns its content directly (an <code>index.md</code> or standalone post), the shortcode form above works as written.</p>
+</blockquote>
+<hr>
+<h2 id="exhibit-fixing-field-mismatches">exhibit: fixing field mismatches</h2>
+<p><em>CDD session · 2026-02-18 · agent: Copilot Claude Sonnet 4.5</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">date</span>: <span style="color:#e6db74">2026-02-18</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">title</span>: <span style="color:#ae81ff">fixing field mismatches</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">current_head</span>: <span style="color:#ae81ff">679a0d47a64fc9686a26ba0cc1f91cd20bb45be7</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">agent</span>: <span style="color:#ae81ff">Copilot Claude Sonnet 4.5</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">session_type</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">instructions</span>: <span style="color:#ae81ff">_cdd-instructions.md</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">topics</span>: [<span style="color:#ae81ff">pydantic, schema, cip, field-naming, model-generation]</span>
+</span></span><span style="display:flex;"><span>---
+</span></span></code></pre></div><aside class="annotation">
+<span class="annotation-label">frontmatter: anchoring the session</span>
+<code>current_head</code> records the exact git commit the agent was working from, making the session reproducible. <code>instructions</code> delegates response-formatting rules to a shared file, keeping boilerplate out of the CDD itself. Together these two fields answer: "what was the agent looking at, and what were the rules of engagement?"
+</aside>
+<hr>
+<h3 id="prompt-1-understanding-the-issue">Prompt 1: understanding the issue</h3>
+<p>While creating and testing ogma.ingest.backwards we found that there were surprising mismatches between ogma.ingest.cip_models and schema/cip_schema.yaml</p>
+<h4 id="mismatches">mismatches</h4>
+<p>The CIP failures are due to <strong>field name mismatches</strong> between the schema YAML and Pydantic models:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Schema YAML</th>
+          <th>Pydantic Model</th>
+          <th>Location</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>billing_prov_num</code></td>
+          <td><code>bill_provider_num</code></td>
+          <td>CIPHeader line 169</td>
+      </tr>
+      <tr>
+          <td><code>billing_prov_npi_num</code></td>
+          <td><code>bill_provider_npi_num</code></td>
+          <td>CIPHeader line 165</td>
+      </tr>
+      <tr>
+          <td><code>billing_prov_taxonomy</code></td>
+          <td><code>bill_provider_taxonomy</code></td>
+          <td>CIPHeader line 166</td>
+      </tr>
+      <tr>
+          <td><code>billing_prov_specialty</code></td>
+          <td><code>bill_provider_specialty_code</code></td>
+          <td>CIPHeader line 167</td>
+      </tr>
+  </tbody>
+</table>
+<p>These fields exist in the Pydantic models but with different names. When the FTS parser reads the schema, it uses the schema field names, but when Pydantic validates, it expects the model field names.</p>
+<p>The <code>*_schema.yaml</code> files were created by ogma.generate.schema from the <strong>absolutely authoritative</strong> data/data_elements.csv</p>
+<p>Look at the mismatches and determine where in the process the differences were introduced.</p>
+<aside class="annotation">
+<span class="annotation-label">give context before asking questions · anchor on authoritative sources</span>
+Two patterns appear in a single prompt. The context (testing the backwards ingestion module, a table of specific failures) limits the search space before the question is asked. The phrase "absolutely authoritative" explicitly names the source of truth — telling the agent which artifact wins any conflict. The question itself asks for a causal account ("where were the differences introduced?"), not just a list of fixes.
+</aside>
+<hr>
+<h3 id="response-1-field-naming-discrepancy-traced-to-manual-pydantic-models">Response 1: field naming discrepancy traced to manual Pydantic models</h3>
+<p>The mismatches were introduced in <code>cip_models.py</code>, which was written manually and uses different field naming conventions than the authoritative data source and generated schema. The schema generation process correctly transformed the authoritative field names, but the Pydantic models diverged.</p>
+<h4 id="data-flow-analysis">Data Flow Analysis</h4>
+<p><strong>1. Authoritative Source: data_elements.csv</strong></p>
+<p>The T-MSIS data dictionary contains the canonical field names:</p>
+<ul>
+<li>Line 561: <code>CIP179</code> → <code>BILLING-PROV-NUM</code></li>
+<li>Line 567: <code>CIP180</code> → <code>BILLING-PROV-NPI-NUM</code></li>
+<li>Line 573: <code>CIP181</code> → <code>BILLING-PROV-TAXONOMY</code></li>
+<li>Line 579: <code>CIP183</code> → <code>BILLING-PROV-SPECIALTY</code></li>
+</ul>
+<p><strong>2. Schema Generation: generate_cip_schema.py</strong></p>
+<p>The schema generator correctly transforms these using <code>normalize_key()</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">normalize_key</span>(data_element_name):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Convert DATA-ELEMENT-NAME to lowercase key.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> data_element_name<span style="color:#f92672">.</span>lower()<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#34;-&#34;</span>, <span style="color:#e6db74">&#34;_&#34;</span>)
+</span></span></code></pre></div><p><strong>3. Pydantic Models: cip_models.py</strong></p>
+<p>The manually-written Pydantic models use inconsistent naming:</p>
+<ul>
+<li><code>bill_provider_npi_num</code> (line 165) — abbreviated &ldquo;billing&rdquo; to &ldquo;bill&rdquo;, expanded &ldquo;prov&rdquo; to &ldquo;provider&rdquo;</li>
+<li><code>bill_provider_taxonomy</code> (line 166) — same pattern</li>
+<li><code>bill_provider_specialty_code</code> (line 167) — added &ldquo;_code&rdquo; suffix</li>
+<li><code>bill_provider_num</code> (line 169) — same pattern</li>
+</ul>
+<h4 id="conclusion">Conclusion</h4>
+<p>The discrepancy was introduced when <code>cip_models.py</code> was manually authored without aligning to the schema field names. The schema generation process faithfully preserved the authoritative data element names (modulo case and hyphen-to-underscore conversion), but the Pydantic models used an ad-hoc naming convention.</p>
+<aside class="annotation">
+<span class="annotation-label">ask the agent to show its work</span>
+The "Data Flow Analysis" section answers a question the prompt didn't ask: <em>how</em> did you determine this? The agent traced the full pipeline — spec → CSV → schema generator → Pydantic models — and cited specific line numbers at each step. This is the difference between being told the answer and being shown the evidence. The cause of the mismatch isn't a hypothesis; it's a fact grounded in the spec.
+</aside>
+<hr>
+<h3 id="prompt-2-fix-the-cip-pydantic-indirectly">Prompt 2: fix the CIP Pydantic indirectly</h3>
+<p>Because ogma.ingest.cip_models was created by an agent, I want you to create a detailed prompt to recreate cip_models from the schema but with explicit guardrails to ensure that the field names are modeled exactly.</p>
+<p>Then use your <code>runSubagent</code> tool to make a new set of Pydantic models for CIP. Then check that new module against the old one ensuring</p>
+<ol>
+<li>the field names are in strict agreement</li>
+<li>that the types and initializers also agree</li>
+</ol>
+<aside class="annotation">
+<span class="annotation-label">constrain scope explicitly</span>
+Rather than "fix this," the prompt asks for a <em>detailed prompt with explicit guardrails</em> before any action is taken — constraining the agent's future behavior, not just its present action. The numbered success criteria (field names in strict agreement; types and initializers also agree) define exactly what "correct" means, leaving no room for the agent to decide for itself what a successful fix looks like.
+</aside>
+<hr>
+<h3 id="response-2-regenerated-cip-models-with-schema-aligned-field-names">Response 2: regenerated CIP models with schema-aligned field names</h3>
+<p>Successfully regenerated CIP Pydantic models with field names that EXACTLY match <code>cip_schema.yaml</code>, fixing all 14 field name mismatches in CIPHeader and 2 in CIPLine.</p>
+<p>The subagent was given strict guardrails:</p>
+<ol>
+<li><strong>EXACT FIELD NAME MATCHING</strong>: Field names MUST be identical to schema keys</li>
+<li><strong>No modifications allowed</strong>: No abbreviating, expanding, or adding suffixes</li>
+<li><strong>Schema is authoritative</strong>: <code>cip_schema.yaml</code> is the single source of truth</li>
+<li><strong>Type preservation</strong>: Retain all types from existing models (str, int, optional fields)</li>
+<li><strong>Structure preservation</strong>: Maintain model hierarchy, lists, config, and denormalized models</li>
+</ol>
+<p>Critical field name corrections verified:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Schema YAML</th>
+          <th>Old Pydantic Model</th>
+          <th>New Pydantic Model</th>
+          <th>Status</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>billing_prov_num</code></td>
+          <td><code>bill_provider_num</code></td>
+          <td><code>billing_prov_num</code></td>
+          <td>✅ Fixed</td>
+      </tr>
+      <tr>
+          <td><code>billing_prov_npi_num</code></td>
+          <td><code>bill_provider_npi_num</code></td>
+          <td><code>billing_prov_npi_num</code></td>
+          <td>✅ Fixed</td>
+      </tr>
+      <tr>
+          <td><code>billing_prov_taxonomy</code></td>
+          <td><code>bill_provider_taxonomy</code></td>
+          <td><code>billing_prov_taxonomy</code></td>
+          <td>✅ Fixed</td>
+      </tr>
+      <tr>
+          <td><code>billing_prov_specialty</code></td>
+          <td><code>bill_provider_specialty_code</code></td>
+          <td><code>billing_prov_specialty</code></td>
+          <td>✅ Fixed</td>
+      </tr>
+      <tr>
+          <td><code>billing_prov_type</code></td>
+          <td><code>bill_provider_type_code</code></td>
+          <td><code>billing_prov_type</code></td>
+          <td>✅ Fixed</td>
+      </tr>
+  </tbody>
+</table>
+<p>Beyond the billing provider fields, the regeneration also corrected patient → eligible naming (<code>patient_first_name</code> → <code>eligible_first_name</code>), provider abbreviation consistency (<code>attending_provider_*</code> → <code>admitting_prov_*</code>), and several other terminology corrections.</p>
+<hr>
+<h3 id="prompt-3-generalize-model-generation-prompt">Prompt 3: generalize model generation prompt</h3>
+<p>In the last step, you created a special purpose prompt <code>regenerate_cip_models_from_schema.md</code>. I want to recast this as a general Copilot Agent definition that can create a set of Pydantic models from a yaml schema.</p>
+<p>The file <code>.github/agents/table-evaluator.md</code> is an example, but you should look up the documentation for custom agent files yourself.</p>
+<hr>
+<h3 id="response-3-copilot-got-stuck">Response 3: copilot got stuck</h3>
+<p>Copilot created <code>.github/agents/pydantic-model-generator.md</code> and then got stuck trying to run <code>python</code>. I created <code>.github/copilot-instructions</code> to tell it that <code>uv run python</code> is the proper way and moved the uncompleted steps to Prompt 4.</p>
+<aside class="annotation">
+<span class="annotation-label">honest failure documentation</span>
+Response 3 is two sentences. The agent got stuck; the human unblocked it by adding a project-level instruction; work moved forward. This is what CDDs look like in practice — not every response is a clean resolution. Documenting the failure and the fix has real value: the <code>.github/copilot-instructions</code> change is now part of the session record, not lost in a terminal history.
+</aside>
+<hr>
+<h3 id="prompt-4">Prompt 4</h3>
+<p>Using the runSubagent tool to invoke pydantic-model-generator, replace the ogma.ingest.cip_models and elg_models modules starting from their respective schemas.</p>
+<p>Finally, run ogma.ingest.main to test the new models.</p>
+<aside class="annotation">
+<span class="annotation-label">build on prior work explicitly · iterate toward simplicity</span>
+Prompt 4 compresses a complex task to two sentences by referring to the agent definition created in Prompt 3. The earlier work becomes infrastructure rather than context to re-explain. The final instruction — "run ogma.ingest.main to test" — closes the loop: success is defined as the full ingestion pipeline working end-to-end, not as the models looking correct in isolation.
+</aside>
+<hr>
+<h3 id="response-4-successfully-regenerated-and-tested-both-cip-and-elg-models">Response 4: successfully regenerated and tested both CIP and ELG models</h3>
+<p>Successfully regenerated both <code>cip_models.py</code> and <code>elg_models.py</code> using the pydantic-model-generator agent. Fixed database.py to remove an invalid field reference (<code>hcpcs_rate</code>) exposed by the stricter schema-aligned models. All models now have field names that exactly match their schemas, and ingestion testing passed successfully.</p>
+<pre tabindex="0"><code>T-MSIS FTS Ingestion
+
+Ingesting CIP file: cip_sample.fts
+  Found 1 claims · Ingested 3 lines · Ingested 3 diagnoses
+Ingesting ELG file: elg_sample.fts
+  Found 1 eligibility records · Ingested 1 eligibility records
+
+Ingestion complete!
+</code></pre><p>✅ All FTS parsing completed successfully
+✅ All Pydantic model validations passed
+✅ Database records inserted correctly</p>
+<hr>
+<h3 id="prompt-5-destroying-intermediate-python-programs">Prompt 5: destroying intermediate python programs</h3>
+<p>In satisfying Prompt 4 with the subagent, I watched it create python programs for model generation and validation. While I didn&rsquo;t capture the CIP programs, I was able to stash <code>tools/*.py</code> before you deleted them.</p>
+<p>First, why did that happen? Is it a feature of subagents that I need to know?</p>
+<p>Second, this suggests that I don&rsquo;t need a subagent for the conversion but rather a more generalized version of the tools programs you created. Is this correct? Don&rsquo;t write code, just help me understand.</p>
+<aside class="annotation">
+<span class="annotation-label">ask the agent to show its work · document the fork points</span>
+Prompt 5 pivots from the work product to the agent's behavior. The human noticed something unexpected (files got deleted), preserved evidence (stashed the tools before they vanished), and asked for an explanation. "Don't write code, just help me understand" is a scope constraint that prevents the agent from demonstrating the architecture instead of explaining it. The fork point is set up implicitly in the two questions: either the subagent approach is right, or permanent tools are.
+</aside>
+<hr>
+<h3 id="response-5-understanding-subagent-behavior-and-architectural-choices">Response 5: understanding subagent behavior and architectural choices</h3>
+<p>Subagents don&rsquo;t auto-delete files — the parent agent attempted cleanup of what appeared to be implementation scaffolding. The ELG tools reveal a better architecture: promote the Python generation scripts to permanent, version-controlled infrastructure while keeping the agent for ad-hoc tasks.</p>
+<p><strong>Use subagents when:</strong></p>
+<ul>
+<li>Task is one-time or infrequent</li>
+<li>Requirements might change (the agent can adapt to new constraints)</li>
+<li>You want delegation — &ldquo;figure out how to do this and report back&rdquo;</li>
+<li>Process needs human judgment or iteration</li>
+</ul>
+<p><strong>Use permanent tools when:</strong></p>
+<ul>
+<li>Task is repetitive (regenerating models after every schema change)</li>
+<li>Process is well-defined and stable</li>
+<li>You want transparency — team members can read and modify the logic</li>
+<li>You need CI/CD integration or automation hooks</li>
+<li>You want version control of the generation logic itself</li>
+</ul>
+<h4 id="the-pattern-youve-discovered">The Pattern You&rsquo;ve Discovered</h4>
+<p>This mirrors a common evolution in AI-assisted development:</p>
+<ol>
+<li><strong>Discovery phase</strong>: Agent explores solution space, creates working code</li>
+<li><strong>Capture phase</strong>: Recognize valuable patterns in agent&rsquo;s work</li>
+<li><strong>Formalization phase</strong>: Promote ad-hoc scripts to first-class tools</li>
+<li><strong>Hybrid phase</strong>: Keep agent for exceptions, use tools for routine work</li>
+</ol>
+<p><strong>Best of both worlds:</strong> tools are the implementation (reviewed, tested, version controlled); the agent is the interface (convenient, adaptive, able to handle edge cases the tool doesn&rsquo;t anticipate yet).</p>
+<aside class="annotation">
+<span class="annotation-label">document the fork points · the discovery → specification → automation arc</span>
+Response 5 converts the human's implicit "is this correct?" into an explicit decision framework with named criteria for each path. This is the <em>discovery → specification → automation</em> arc from the main post made visible in a single session: the subagent approach was discovery; the generated agent definition was specification; promoting the tools scripts to permanent infrastructure is automation. The fork is documented, not resolved — both approaches are valid, and the response says when each applies.
+</aside>
+
+
+
+
+
+
+    </main>
+
+    <footer>
+      <p>contact me via
+        <a rel="me" href="https://github.com/mwartell">GitHub/mwartell</a>
+        <a href="mailto:matt.wartell@gmail.com">matt.wartell@gmail.com</a>
+        <a rel="external" href="https://linkedin.com/in/mattwartell">LinkedIn:mattwartell</a>
+      </p>
+      <p>this website was built with <a href="https://gohugo.io">Hugo</a>.</p>
+    </footer>
+  </body>
+
+</html>

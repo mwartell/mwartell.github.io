@@ -1,6 +1,7 @@
 baseURL = "https://mwartell.github.io/"
 languageCode = "en-us"
 title = "mwartell maladies"
+publishDir = "docs"
 
 [params]
 description = "the fourth most influential blog in the galaxy…"

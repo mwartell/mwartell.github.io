@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on mwartell maladies</title>
+    <link>https://mwartell.github.io/tags/</link>
+    <description>Recent content in Tags on mwartell maladies</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 11 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://mwartell.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Agentic Development</title>
+      <link>https://mwartell.github.io/tags/agentic-development/</link>
+      <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://mwartell.github.io/tags/agentic-development/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Python Packaging</title>
+      <link>https://mwartell.github.io/tags/python-packaging/</link>
+      <pubDate>Wed, 29 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://mwartell.github.io/tags/python-packaging/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Minimalism</title>
+      <link>https://mwartell.github.io/tags/minimalism/</link>
+      <pubDate>Wed, 04 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>https://mwartell.github.io/tags/minimalism/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Simplicity</title>
+      <link>https://mwartell.github.io/tags/simplicity/</link>
+      <pubDate>Wed, 04 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>https://mwartell.github.io/tags/simplicity/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Shell</title>
+      <link>https://mwartell.github.io/tags/shell/</link>
+      <pubDate>Tue, 21 Sep 2021 00:00:00 +0000</pubDate>
+      <guid>https://mwartell.github.io/tags/shell/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>
