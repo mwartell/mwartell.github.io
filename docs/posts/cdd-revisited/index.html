@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8220&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
@@ -48,27 +48,23 @@
     </p>
   </aside>
 
-  <p>In January I wrote about <a href="/posts/collaborative-development-docs/">Collaborative Development Documentation</a> — a structured way to capture the back-and-forth of human-AI technical work. Since then I&rsquo;ve written about twenty CDDs across a real project, and the practice has evolved considerably. The structural ideas from that first post still hold, but the interesting part turned out to be something I barely mentioned: <em>how you think</em> when you&rsquo;re writing the prompts.</p>
+  <p>In January I wrote about <a href="/posts/collaborative-development-docs/">Collaborative Development Documentation</a> — a structured way to capture the back-and-forth of human-AI technical work. Since then I&rsquo;ve written about many CDDs across real projects, and my practice has evolved considerably. The structural ideas from that first post still hold, but the interesting part turned out to be something I barely mentioned: <em>how I think</em> when I&rsquo;m writing the prompts.</p>
 <h2 id="what-a-cdd-actually-looks-like-in-practice">what a CDD actually looks like in practice</h2>
-<p>The bones are the same: a markdown file with YAML frontmatter, organized as numbered Prompt/Response pairs. But the frontmatter has simplified. Here&rsquo;s a typical header:</p>
+<p>The bones are the same: a markdown file with YAML frontmatter, organized as numbered Prompt/Response sections. Here&rsquo;s a typical header:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">date</span>: <span style="color:#e6db74">2026-02-18</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">title</span>: <span style="color:#ae81ff">fixing field mismatches</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">current_head</span>: <span style="color:#ae81ff">a1b2c3d</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">agent</span>: <span style="color:#ae81ff">Copilot Claude Sonnet 4.5</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">session_type</span>:
 </span></span><span style="display:flex;"><span><span style="color:#f92672">instructions</span>: <span style="color:#ae81ff">_cdd-instructions.md</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">topics</span>: [<span style="color:#ae81ff">cip, schema, pydantic]</span>
 </span></span><span style="display:flex;"><span>---
 </span></span></code></pre></div><p>The <code>instructions</code> field points to a shared file that tells the agent how to format responses — where to put the Response header, how to confirm it read the instructions. This keeps the CDD itself clean. The <code>current_head</code> anchors the session to a specific point in the codebase, so you can reconstruct what the agent was looking at.</p>
 <p>I also built two VS Code prompt files to reduce friction:</p>
-<ul>
-<li><strong>cdd-start.prompt.md</strong> scaffolds a new CDD — it creates the file with proper frontmatter, names it by date and topic, and drops in a placeholder for the first prompt. One command to start a new session.</li>
-<li><strong>cdd.prompt.md</strong> dispatches to a specific prompt number in an existing CDD. When I type <code>/cdd 3</code>, the agent reads the instructions file, finds Prompt 3, and executes it. The CDD becomes a script I can run step by step.</li>
-</ul>
-<p>This matters because it collapses the ceremony. Starting a collaborative session is as easy as starting a conversation.</p>
+<p><code>cdd-start.prompt.md</code> scaffolds a new CDD — it creates the file with proper frontmatter, names it by date and topic, and drops in a placeholder for the first prompt. One command to start a new session. I started the example above with <code>/cdd-start fixing field matches</code></p>
+<p><code>cdd.prompt.md</code> dispatches to a specific prompt number in an existing CDD. When I type <code>/cdd 3</code>, the agent reads the instructions file, finds Prompt 3, and executes it. The CDD becomes a script I can run step by step.</p>
 <h2 id="the-real-subject-how-to-think-in-prompts">the real subject: how to think in prompts</h2>
-<p>The structure was always just scaffolding. What I actually learned over twenty sessions is a set of thinking habits for writing effective prompts. These aren&rsquo;t about prompt engineering tricks — they&rsquo;re about the quality of thought you bring to the collaboration.</p>
+<p>The structure was always just scaffolding. What I actually learned over a few months of use is a set of thinking habits for writing effective prompts. These aren&rsquo;t about prompt engineering tricks — they&rsquo;re about the quality of thought you bring to the collaboration.</p>
 <h3 id="give-context-before-asking-questions">give context before asking questions</h3>
 <p>The single most consistent pattern across every effective CDD prompt: provide the situation <em>first</em>, then ask the question. Not &ldquo;fix this bug&rdquo; but:</p>
 <blockquote>
@@ -121,98 +117,19 @@
 <p>Either: (1) The S9 fields should actually be unsigned 9 fields and the schema is wrong, OR (2) The sign indicator is needed and the test data is wrong. Gather evidence.</p>
 </blockquote>
 <p>This prevents the agent from silently choosing an interpretation and building on a possibly wrong assumption. It also documents your thinking for anyone who reads the CDD later.</p>
-<h2 id="what-emerged-over-twenty-sessions">what emerged over twenty sessions</h2>
-<p>Looking across the corpus, I can see a clear arc. Early sessions were exploratory: &ldquo;evaluate these rules,&rdquo; &ldquo;what does this data mean?&rdquo; The prompts were broad and the agents would sometimes wander.</p>
-<p>By the middle sessions, prompts became specification-anchored: &ldquo;validate this schema against the authoritative data elements CSV.&rdquo; Every claim had to be grounded in a concrete artifact.</p>
-<p>By the late sessions, the prompts were building <em>reproducible processes</em>: &ldquo;create a detailed prompt for regenerating Pydantic models from the schema, then use your subagent tool to execute it.&rdquo; The human was teaching the agent a methodology, not solving a one-off problem.</p>
+<h2 id="reviewing-my-use-of-cdds">reviewing my use of CDDs</h2>
+<p>Looking across the CDDs for a project, I can see a clear arc. Early sessions were exploratory: &ldquo;evaluate these rules,&rdquo; &ldquo;what does this data mean?&rdquo; The prompts were broad and the agents would sometimes wander.</p>
+<p>By the middle sessions, my prompts became specification-anchored: &ldquo;validate this schema against the authoritative data elements CSV.&rdquo; Every claim had to be grounded in a concrete artifact.</p>
+<p>By the late sessions, my prompts were building <em>reproducible processes</em>: &ldquo;create a detailed prompt for regenerating Pydantic models from the schema, then use your subagent tool to execute it.&rdquo; I was teaching the agent a methodology, not solving a one-off problem.</p>
 <p>The pattern: <strong>discovery → specification → automation</strong>. Each phase&rsquo;s CDDs built explicitly on the previous phase&rsquo;s findings. The documents weren&rsquo;t just records — they were the connective tissue of the project.</p>
 <h2 id="the-meta-lesson">the meta-lesson</h2>
 <p>The original CDD post focused on the <em>what</em>: frontmatter, prompt-response structure, cross-session references. The practice taught me the <em>how</em>: think before you prompt. Provide context. Anchor on facts. Constrain scope. Build chains. Ask for evidence, not opinions. Iterate toward clarity.</p>
 <p>These are thinking habits, not formatting rules. They work because they force the human side of the collaboration to be precise — which, more than any structural innovation, is what makes the agent side useful.</p>
-<h2 id="the-annotated-exemplar">the annotated exemplar</h2>
+<h2 id="an-annotated-example">an annotated example</h2>
 <p>The CDD from which most of the examples in this post were drawn — <em>fixing field mismatches</em> (2026-02-18) — is annotated below. Each annotation calls out the thinking habit at work. It also includes a few moments not in the main text: a one-sentence failure response, and a final pivot from &ldquo;what did you build?&rdquo; to &ldquo;why did you build it that way?&rdquo;</p>
 
 
-  <p>Of the twenty CDDs in the corpus, this one demonstrates all seven thinking habits from the main post. Here&rsquo;s a map before the walkthrough:</p>
-<table>
-  <thead>
-      <tr>
-          <th>Pattern</th>
-          <th>Where it appears</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><strong>give context before asking questions</strong></td>
-          <td>Prompt 1 opens with the testing context, the specific failure, and a table of evidence before posing the question</td>
-      </tr>
-      <tr>
-          <td><strong>anchor on authoritative sources</strong></td>
-          <td><code>data_elements.csv</code> is explicitly named &ldquo;absolutely authoritative&rdquo;; Response 1 traces every mismatch to a specific spec line number</td>
-      </tr>
-      <tr>
-          <td><strong>constrain scope explicitly</strong></td>
-          <td>Prompt 2 demands explicit guardrails and names five of them; those constraints travel with the generated agent definition into Prompt 4</td>
-      </tr>
-      <tr>
-          <td><strong>build on prior work explicitly</strong></td>
-          <td>Prompt 4 invokes the <code>pydantic-model-generator</code> agent created in Prompt 3; Response 4 validates against earlier test data</td>
-      </tr>
-      <tr>
-          <td><strong>ask the agent to show its work</strong></td>
-          <td>Prompt 5 asks directly: &ldquo;why did that happen?&rdquo; — pivoting from the work product to the reasoning process</td>
-      </tr>
-      <tr>
-          <td><strong>iterate toward simplicity</strong></td>
-          <td>Prompt 3 creates a special-purpose prompt → Prompt 4 reuses it → Response 5 proposes replacing the whole approach with permanent tools</td>
-      </tr>
-      <tr>
-          <td><strong>document the fork points</strong></td>
-          <td>Response 5 lays out &ldquo;use subagents when / use permanent tools when&rdquo; as explicit decision criteria rather than advocating one path</td>
-      </tr>
-  </tbody>
-</table>
-<p>The session also shows something not in the original list: <strong>honest failure documentation</strong>. Response 3 is two sentences. The agent got stuck; the human fixed the environment and moved on. In CDD format, that&rsquo;s a valid response.</p>
-<hr>
-<h2 id="annotating-cdds-in-hugo">annotating CDDs in Hugo</h2>
-<p>A CDD in its raw form is a flat document: prompts and responses in sequence. An annotated walkthrough needs a visual layer that separates &ldquo;this is the CDD&rdquo; from &ldquo;this is commentary about the CDD.&rdquo;</p>
-<p>Hugo provides a natural mechanism: a paired shortcode that wraps annotation content in a styled aside.</p>
-<p><strong><code>layouts/shortcodes/annotation.html</code>:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">aside</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;annotation&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>  {{- with .Get 0 }}&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;annotation-label&#34;</span>&gt;{{ . }}&lt;/<span style="color:#f92672">span</span>&gt;{{ end }}
-</span></span><span style="display:flex;"><span>  {{ .Inner | markdownify }}
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">aside</span>&gt;
-</span></span></code></pre></div><p><strong>Usage in a page:</strong></p>
-<pre tabindex="0"><code>{{&lt; annotation &#34;give context before asking questions&#34; &gt;}}
-The prompt establishes the testing context, names the failing module,
-and presents a table of evidence — all before asking the question.
-{{&lt; /annotation &gt;}}
-</code></pre><p><strong>CSS to add to <code>static/style.css</code>:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-css" data-lang="css"><span style="display:flex;"><span><span style="color:#f92672">aside</span>.<span style="color:#a6e22e">annotation</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">background</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>background<span style="color:#f92672">-</span>dim);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">border-left</span>: <span style="color:#ae81ff">3</span><span style="color:#66d9ef">px</span> <span style="color:#66d9ef">solid</span> <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>primary<span style="color:#f92672">-</span><span style="color:#66d9ef">color</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">border-radius</span>: <span style="color:#ae81ff">0.3</span><span style="color:#66d9ef">rem</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0.75</span><span style="color:#66d9ef">rem</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">rem</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">1.5</span><span style="color:#66d9ef">rem</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">font-size</span>: <span style="color:#ae81ff">0.9</span><span style="color:#66d9ef">rem</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">font-style</span>: <span style="color:#66d9ef">normal</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">color</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>foreground);
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">aside</span>.<span style="color:#a6e22e">annotation</span> .<span style="color:#a6e22e">annotation-label</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">block</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">font-weight</span>: <span style="color:#66d9ef">bold</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">color</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>primary<span style="color:#f92672">-</span><span style="color:#66d9ef">color</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">font-family</span>: <span style="color:#e6db74">&#34;Enriqueta&#34;</span>, <span style="color:#66d9ef">serif</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">margin-bottom</span>: <span style="color:#ae81ff">0.5</span><span style="color:#66d9ef">rem</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><blockquote>
-<p><strong>Note on exhibits:</strong> Hugo shortcodes are not processed inside page bundle resource files — the mechanism used for these exhibits. The annotated CDD below uses equivalent inline HTML <code>&lt;aside&gt;</code> elements. In a page that owns its content directly (an <code>index.md</code> or standalone post), the shortcode form above works as written.</p>
-</blockquote>
-<hr>
-<h2 id="exhibit-fixing-field-mismatches">exhibit: fixing field mismatches</h2>
-<p><em>CDD session · 2026-02-18 · agent: Copilot Claude Sonnet 4.5</em></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">date</span>: <span style="color:#e6db74">2026-02-18</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">title</span>: <span style="color:#ae81ff">fixing field mismatches</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">current_head</span>: <span style="color:#ae81ff">679a0d47a64fc9686a26ba0cc1f91cd20bb45be7</span>
@@ -225,7 +142,6 @@ and presents a table of evidence — all before asking the question.
 <span class="annotation-label">frontmatter: anchoring the session</span>
 <code>current_head</code> records the exact git commit the agent was working from, making the session reproducible. <code>instructions</code> delegates response-formatting rules to a shared file, keeping boilerplate out of the CDD itself. Together these two fields answer: "what was the agent looking at, and what were the rules of engagement?"
 </aside>
-<hr>
 <h3 id="prompt-1-understanding-the-issue">Prompt 1: understanding the issue</h3>
 <p>While creating and testing ogma.ingest.backwards we found that there were surprising mismatches between ogma.ingest.cip_models and schema/cip_schema.yaml</p>
 <h4 id="mismatches">mismatches</h4>
