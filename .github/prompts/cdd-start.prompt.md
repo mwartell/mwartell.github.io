@@ -28,7 +28,7 @@ The new document must include these fields in its yaml header:
 → Title should be: "implementing auth system"
 
 ### Filename Convention
-Use format: `YYYY-MM-DD-descriptive-name.md` in the `docs/assistant/` directory
+Use format: `YYYY-MM-DD-descriptive-name.md` in the `cdd/` directory
 
 ### Document Body Structure
 1. **Title as H1 heading** - matches the title from front matter
@@ -41,7 +41,6 @@ The workflow instructions are referenced via the `instructions:` field in YAML f
 Read the version from this prompt in the `## Document Creation Requirements` section and get the version number from the _cdd-instructions.md file. Report their agreement or mismatch in responding to this prompt.
 
 ### Agent Behavior Note
-Agents following _cdd-instructions.md will end each response with the marker `నేను సూచనలను చదివాను.` to confirm they've read the instructions.
 
 Example user request:
 "Follow instructions in cdd-start.prompt.md.
