@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python Packaging on mwartell maladies</title>
+    <link>http://localhost:8220/tags/python-packaging/</link>
+    <description>Recent content in Python Packaging on mwartell maladies</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 29 Jan 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:8220/tags/python-packaging/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>making python packages the modern way</title>
+      <link>http://localhost:8220/posts/modern-python-packages/</link>
+      <pubDate>Wed, 29 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:8220/posts/modern-python-packages/</guid>
+      <description>&lt;p&gt;Although the [uv package and project management tool][uv] has been taking the Python&#xA;community by storm, I&amp;rsquo;ve found its documentation to be annoying incomplete. This&#xA;is the first in a series of notes that I&amp;rsquo;m writing to address some places of chronic&#xA;misunderstandings I&amp;rsquo;ve seen in the community.&lt;/p&gt;&#xA;&lt;p&gt;The first of these is how to handle imports within the package being written under&#xA;uv. I&amp;rsquo;ve not found a place where this is described clearly and adds to the longstanding&#xA;Python problems of getting relative imports correct.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

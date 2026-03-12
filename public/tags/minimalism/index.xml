@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Minimalism on mwartell maladies</title>
+    <link>http://localhost:8220/tags/minimalism/</link>
+    <description>Recent content in Minimalism on mwartell maladies</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 04 Dec 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:8220/tags/minimalism/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>a plea for better developer documentation</title>
+      <link>http://localhost:8220/posts/plea-for-better-docs/</link>
+      <pubDate>Wed, 04 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:8220/posts/plea-for-better-docs/</guid>
+      <description>&lt;p&gt;This notion has been in my head for years, but seeing the instructions for&#xA;Installing &lt;a href=&#34;https://www.rust-lang.org/tools/install&#34;&gt;Rust&lt;/a&gt; on Linix made me&#xA;want to write this down.&lt;/p&gt;&#xA;&lt;p&gt;The cut-and-paste instructions are&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;Now &lt;code&gt;curl https://some.site/some.sh | sh&lt;/code&gt; is mildly spooky on its own,&#xA;running a script from the internet. But, the Rust team has a good reputation&#xA;and we can assume that the script is safe. But then why the additional&#xA;flags on curl? What do they do? Why are they there? Do I need them?&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -7,8 +7,6 @@ __pycache__/
 # Hugo
 resources/
 .hugo_build.lock
-public/
-/docs
 
 # Node.js
 node_modules/

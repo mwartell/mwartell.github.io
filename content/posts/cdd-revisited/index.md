@@ -119,3 +119,9 @@ The pattern: **discovery → specification → automation**. Each phase's CDDs b
 The original CDD post focused on the *what*: frontmatter, prompt-response structure, cross-session references. The practice taught me the *how*: think before you prompt. Provide context. Anchor on facts. Constrain scope. Build chains. Ask for evidence, not opinions. Iterate toward clarity.
 
 These are thinking habits, not formatting rules. They work because they force the human side of the collaboration to be precise — which, more than any structural innovation, is what makes the agent side useful.
+
+## the annotated exemplar
+
+The CDD from which most of the examples in this post were drawn — *fixing field mismatches* (2026-02-18) — is annotated below. Each annotation calls out the thinking habit at work. It also includes a few moments not in the main text: a one-sentence failure response, and a final pivot from "what did you build?" to "why did you build it that way?"
+
+{{< exhibit "exhibit-fixing-field-mismatches.md" >}}
