@@ -1,6 +1,7 @@
 ---
 description: 'Start a collaborative development document'
 tools: ['execute/getTerminalOutput', 'execute/runInTerminal', 'read/readFile', 'edit/createFile', 'edit/editFiles', 'todo']
+model: "Claude Haiku 4.5"
 ---
 
 Start a collaborative development document with yaml front matter and simple instructions to guide a new Agent session.

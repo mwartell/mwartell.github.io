@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Agentic Literature Review on mwartell maladies</title>
+    <link>http://localhost:1313/tags/agentic-literature-review/</link>
+    <description>Recent content in Agentic Literature Review on mwartell maladies</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 11 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/agentic-literature-review/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Is there prior art for the CDD concept</title>
+      <link>http://localhost:1313/posts/cdd-novelty/</link>
+      <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/cdd-novelty/</guid>
+      <description>&lt;p&gt;I used a collaborative development session to find support for my claim of novelty. I find Response 3 interestingly because it asks the Agent to tell me how to better use the Agent.&lt;/p&gt;&#xA;&#xA;&#xA;  &#xA;    &#xA;    &#xA;      &#xA;    &#xA;    &lt;hr&gt;&#xA;&lt;h2 id=&#34;topics-&#34;&gt;date: 2026-03-13&#xA;title: cdd literature review&#xA;current_head: f3ffc89f6b9983f31fdd3c141f30b740f0107f83&#xA;agent: Copilot Claude Opus 4.6&#xA;session_type:&#xA;instructions: _cdd-instructions.md&#xA;topics: []&lt;/h2&gt;&#xA;&lt;h1 id=&#34;cdd-literature-review&#34;&gt;cdd literature review&lt;/h1&gt;&#xA;&lt;h2 id=&#34;prompt-1-find-prior-art-related-to-cdd&#34;&gt;Prompt 1: find prior art related to CDD&lt;/h2&gt;&#xA;&lt;p&gt;Because I have not seen anything like it, I believe that the CDD concept is novel. Look at the collaborative-development-docs and cdd-revisited and then search the web for similar approaches to working with agentic AI in software development. Create an annotated bibliography of your results&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Agentic Development on mwartell maladies</title>
-    <link>http://localhost:8220/tags/agentic-development/</link>
+    <link>http://localhost:1313/tags/agentic-development/</link>
     <description>Recent content in Agentic Development on mwartell maladies</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 11 Mar 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:8220/tags/agentic-development/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/agentic-development/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>collaborative development docs revisited</title>
-      <link>http://localhost:8220/posts/cdd-revisited/</link>
+      <link>http://localhost:1313/posts/cdd-revisited/</link>
       <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:8220/posts/cdd-revisited/</guid>
-      <description>&lt;p&gt;In January I wrote about &lt;a href=&#34;http://localhost:8220/posts/collaborative-development-docs/&#34;&gt;Collaborative Development Documentation&lt;/a&gt; — a structured way to capture the back-and-forth of human-AI technical work. Since then I&amp;rsquo;ve written about many CDDs across real projects, and my practice has evolved considerably. The structural ideas from that first post still hold, but the interesting part turned out to be something I barely mentioned: &lt;em&gt;how I think&lt;/em&gt; when I&amp;rsquo;m writing the prompts.&lt;/p&gt;&#xA;&lt;h2 id=&#34;what-a-cdd-actually-looks-like-in-practice&#34;&gt;what a CDD actually looks like in practice&lt;/h2&gt;&#xA;&lt;p&gt;The bones are the same: a markdown file with YAML frontmatter, organized as numbered Prompt/Response sections. Here&amp;rsquo;s a typical header:&lt;/p&gt;</description>
+      <guid>http://localhost:1313/posts/cdd-revisited/</guid>
+      <description>&lt;p&gt;In January I wrote about &lt;a href=&#34;http://localhost:1313/posts/collaborative-development-docs/&#34;&gt;Collaborative Development Documentation&lt;/a&gt; — a structured way to capture the back-and-forth of human-AI technical work. Since then I&amp;rsquo;ve written about many CDDs across real projects, and my practice has evolved considerably. The structural ideas from that first post still hold, but the interesting part turned out to be something I barely mentioned: &lt;em&gt;how I think&lt;/em&gt; when I&amp;rsquo;m writing the prompts.&lt;/p&gt;&#xA;&lt;h2 id=&#34;what-a-cdd-actually-looks-like-in-practice&#34;&gt;what a CDD actually looks like in practice&lt;/h2&gt;&#xA;&lt;p&gt;The bones are the same: a markdown file with YAML frontmatter, organized as numbered Prompt/Response sections. Here&amp;rsquo;s a typical header:&lt;/p&gt;</description>
     </item>
     <item>
       <title>collaborative development documentation</title>
-      <link>http://localhost:8220/posts/collaborative-development-docs/</link>
+      <link>http://localhost:1313/posts/collaborative-development-docs/</link>
       <pubDate>Mon, 26 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:8220/posts/collaborative-development-docs/</guid>
+      <guid>http://localhost:1313/posts/collaborative-development-docs/</guid>
       <description>&lt;p&gt;In the rapidly evolving landscape of AI-assisted software development, new patterns of human-machine collaboration are emerging that challenge traditional approaches to technical documentation and problem-solving. Through analyzing real-world debugging sessions between developers and AI assistants, I&amp;rsquo;ve identified a novel methodology I call &lt;strong&gt;Collaborative Diagnostic Documentation&lt;/strong&gt; (CDD) - a structured approach to capturing, analyzing, and building upon interactive technical investigations.&lt;/p&gt;&#xA;&lt;h2 id=&#34;the-problem-lost-knowledge-in-interactive-sessions&#34;&gt;the problem: lost knowledge in interactive sessions&lt;/h2&gt;&#xA;&lt;p&gt;Traditional software engineering documentation falls into predictable categories:&lt;/p&gt;</description>
     </item>
   </channel>

@@ -2,45 +2,52 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on mwartell maladies</title>
-    <link>http://localhost:8220/posts/</link>
+    <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on mwartell maladies</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 11 Mar 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:8220/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>collaborative development docs revisited</title>
-      <link>http://localhost:8220/posts/cdd-revisited/</link>
+      <link>http://localhost:1313/posts/cdd-revisited/</link>
       <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:8220/posts/cdd-revisited/</guid>
-      <description>&lt;p&gt;In January I wrote about &lt;a href=&#34;http://localhost:8220/posts/collaborative-development-docs/&#34;&gt;Collaborative Development Documentation&lt;/a&gt; — a structured way to capture the back-and-forth of human-AI technical work. Since then I&amp;rsquo;ve written about many CDDs across real projects, and my practice has evolved considerably. The structural ideas from that first post still hold, but the interesting part turned out to be something I barely mentioned: &lt;em&gt;how I think&lt;/em&gt; when I&amp;rsquo;m writing the prompts.&lt;/p&gt;&#xA;&lt;h2 id=&#34;what-a-cdd-actually-looks-like-in-practice&#34;&gt;what a CDD actually looks like in practice&lt;/h2&gt;&#xA;&lt;p&gt;The bones are the same: a markdown file with YAML frontmatter, organized as numbered Prompt/Response sections. Here&amp;rsquo;s a typical header:&lt;/p&gt;</description>
+      <guid>http://localhost:1313/posts/cdd-revisited/</guid>
+      <description>&lt;p&gt;In January I wrote about &lt;a href=&#34;http://localhost:1313/posts/collaborative-development-docs/&#34;&gt;Collaborative Development Documentation&lt;/a&gt; — a structured way to capture the back-and-forth of human-AI technical work. Since then I&amp;rsquo;ve written about many CDDs across real projects, and my practice has evolved considerably. The structural ideas from that first post still hold, but the interesting part turned out to be something I barely mentioned: &lt;em&gt;how I think&lt;/em&gt; when I&amp;rsquo;m writing the prompts.&lt;/p&gt;&#xA;&lt;h2 id=&#34;what-a-cdd-actually-looks-like-in-practice&#34;&gt;what a CDD actually looks like in practice&lt;/h2&gt;&#xA;&lt;p&gt;The bones are the same: a markdown file with YAML frontmatter, organized as numbered Prompt/Response sections. Here&amp;rsquo;s a typical header:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Is there prior art for the CDD concept</title>
+      <link>http://localhost:1313/posts/cdd-novelty/</link>
+      <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/cdd-novelty/</guid>
+      <description>&lt;p&gt;I used a collaborative development session to find support for my claim of novelty. I find Response 3 interestingly because it asks the Agent to tell me how to better use the Agent.&lt;/p&gt;&#xA;&#xA;&#xA;  &#xA;    &#xA;    &#xA;      &#xA;    &#xA;    &lt;hr&gt;&#xA;&lt;h2 id=&#34;topics-&#34;&gt;date: 2026-03-13&#xA;title: cdd literature review&#xA;current_head: f3ffc89f6b9983f31fdd3c141f30b740f0107f83&#xA;agent: Copilot Claude Opus 4.6&#xA;session_type:&#xA;instructions: _cdd-instructions.md&#xA;topics: []&lt;/h2&gt;&#xA;&lt;h1 id=&#34;cdd-literature-review&#34;&gt;cdd literature review&lt;/h1&gt;&#xA;&lt;h2 id=&#34;prompt-1-find-prior-art-related-to-cdd&#34;&gt;Prompt 1: find prior art related to CDD&lt;/h2&gt;&#xA;&lt;p&gt;Because I have not seen anything like it, I believe that the CDD concept is novel. Look at the collaborative-development-docs and cdd-revisited and then search the web for similar approaches to working with agentic AI in software development. Create an annotated bibliography of your results&lt;/p&gt;</description>
     </item>
     <item>
       <title>collaborative development documentation</title>
-      <link>http://localhost:8220/posts/collaborative-development-docs/</link>
+      <link>http://localhost:1313/posts/collaborative-development-docs/</link>
       <pubDate>Mon, 26 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:8220/posts/collaborative-development-docs/</guid>
+      <guid>http://localhost:1313/posts/collaborative-development-docs/</guid>
       <description>&lt;p&gt;In the rapidly evolving landscape of AI-assisted software development, new patterns of human-machine collaboration are emerging that challenge traditional approaches to technical documentation and problem-solving. Through analyzing real-world debugging sessions between developers and AI assistants, I&amp;rsquo;ve identified a novel methodology I call &lt;strong&gt;Collaborative Diagnostic Documentation&lt;/strong&gt; (CDD) - a structured approach to capturing, analyzing, and building upon interactive technical investigations.&lt;/p&gt;&#xA;&lt;h2 id=&#34;the-problem-lost-knowledge-in-interactive-sessions&#34;&gt;the problem: lost knowledge in interactive sessions&lt;/h2&gt;&#xA;&lt;p&gt;Traditional software engineering documentation falls into predictable categories:&lt;/p&gt;</description>
     </item>
     <item>
       <title>making python packages the modern way</title>
-      <link>http://localhost:8220/posts/modern-python-packages/</link>
+      <link>http://localhost:1313/posts/modern-python-packages/</link>
       <pubDate>Wed, 29 Jan 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:8220/posts/modern-python-packages/</guid>
+      <guid>http://localhost:1313/posts/modern-python-packages/</guid>
       <description>&lt;p&gt;Although the [uv package and project management tool][uv] has been taking the Python&#xA;community by storm, I&amp;rsquo;ve found its documentation to be annoying incomplete. This&#xA;is the first in a series of notes that I&amp;rsquo;m writing to address some places of chronic&#xA;misunderstandings I&amp;rsquo;ve seen in the community.&lt;/p&gt;&#xA;&lt;p&gt;The first of these is how to handle imports within the package being written under&#xA;uv. I&amp;rsquo;ve not found a place where this is described clearly and adds to the longstanding&#xA;Python problems of getting relative imports correct.&lt;/p&gt;</description>
     </item>
     <item>
       <title>a plea for better developer documentation</title>
-      <link>http://localhost:8220/posts/plea-for-better-docs/</link>
+      <link>http://localhost:1313/posts/plea-for-better-docs/</link>
       <pubDate>Wed, 04 Dec 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:8220/posts/plea-for-better-docs/</guid>
+      <guid>http://localhost:1313/posts/plea-for-better-docs/</guid>
       <description>&lt;p&gt;This notion has been in my head for years, but seeing the instructions for&#xA;Installing &lt;a href=&#34;https://www.rust-lang.org/tools/install&#34;&gt;Rust&lt;/a&gt; on Linix made me&#xA;want to write this down.&lt;/p&gt;&#xA;&lt;p&gt;The cut-and-paste instructions are&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;Now &lt;code&gt;curl https://some.site/some.sh | sh&lt;/code&gt; is mildly spooky on its own,&#xA;running a script from the internet. But, the Rust team has a good reputation&#xA;and we can assume that the script is safe. But then why the additional&#xA;flags on curl? What do they do? Why are they there? Do I need them?&lt;/p&gt;</description>
     </item>
     <item>
       <title>a clear shortcut</title>
-      <link>http://localhost:8220/posts/a-clear-shortcut/</link>
+      <link>http://localhost:1313/posts/a-clear-shortcut/</link>
       <pubDate>Tue, 21 Sep 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:8220/posts/a-clear-shortcut/</guid>
+      <guid>http://localhost:1313/posts/a-clear-shortcut/</guid>
       <description>&lt;p&gt;When sharing terminal screens in video conferencing, I often see&#xA;people typing&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;clear&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;in the shell to clear the screen. There is a better way.&lt;/p&gt;&#xA;&lt;p&gt;Since as long as I can remember, possibly dating back to the&#xA;advent of GNU Bash and its &lt;a href=&#34;https://en.wikipedia.org/wiki/GNU_Readline&#34;&gt;readline&lt;/a&gt; line editor, Ctrl-L&#xA;has been present to clear the screen. To use it, press&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;Ctrl-L&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;The historically minded will remember that Ctrl-L is the ␌&#xA;ASCII form-feed character that would eject a page when sent&#xA;to a Teletype.&lt;/p&gt;</description>
     </item>
   </channel>
