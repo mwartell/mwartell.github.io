@@ -1,0 +1,57 @@
+version: "3"
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list
+
+  build:
+    desc: Build the static site
+    cmds:
+      - hugo --minify
+
+  serve:
+    desc: Serve the site locally with live reload
+    cmds:
+      - hugo server -D --port 8220 --openBrowser
+
+  clean:
+    desc: Clean build output
+    cmds:
+      - rm -rf public/*
+
+  install:
+    desc: Install test dependencies
+    cmds:
+      - npm install
+      - npx playwright install chromium
+
+  test:
+    desc: Run Playwright tests (headless)
+    deps: [install]
+    cmds:
+      - npx playwright test --reporter=line
+
+  test-ui:
+    desc: Run Playwright tests with UI
+    deps: [install]
+    cmds:
+      - npx playwright test --ui
+
+  test-headed:
+    desc: Run Playwright tests with visible browser
+    deps: [install]
+    cmds:
+      - npx playwright test --headed
+
+  test-report:
+    desc: Run Playwright tests and show HTML report
+    deps: [install]
+    cmds:
+      - npx playwright test && npx playwright show-report
+
+  open:
+    desc: Open the live site
+    cmds:
+      - open https://mwartell.github.io

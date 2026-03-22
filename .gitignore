@@ -1,4 +1,5 @@
 cdd-corpus/
+.DS_Store
 
 __pycache__/
 *.pyc
@@ -10,8 +11,8 @@ resources/
 
 # Node.js
 node_modules/
-package-lock.json
 
 # Playwright
 playwright-report/
 test-results/
+content/posts/cdd-novelty/index.md
