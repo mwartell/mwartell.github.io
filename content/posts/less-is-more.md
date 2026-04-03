@@ -5,65 +5,65 @@ draft: true
 ---
 
 
-I was staring at a pull request the other day — forty-seven files changed, a new abstraction layer, a new container where previously there had been none, and all the associated container build and run mechanisms. The commit message said "refactor for extensibility". I sat with it for a while, and eventually wrote a two-word review: "but why?"
+I was staring at a pull request the other day — forty-seven files changed, a new abstraction layer, a new container where previously there had been none, and all the associated container build and run mechanisms. The commit message said "refactor for extensibility".
 
-This is not a story about that particular pull request, which was resolved amicably; it is about the instinct that produced it. The instinct is natural, nearly universal among people who write software, and almost always wrong: when something is hard, add more stuff.
+This is not a story about that particular pull request, it is about the instinct that produced it, and about a maxim I have come to regard as among the most useful and least heeded in software engineering.
+
+David Wheeler of Cambridge gave us the prescription:
+
+> all problems in computer science can be solved by another level of indirection.
+
+Kevin Henney gave us the corollary, which is the part that actually matters:
+
+> *except for the problem of too many levels of indirection*.
+
+The original clause is sound engineering advice. The corollary is a warning. What Henney understood, and what the forty-seven-file pull request demonstrates, is that indirection is not merely a tool — it is a seduction; and the seduction, once yielded to, compounds.
+
+### the pleasures of adding
+
+The appeal of indirection is not hard to understand. When two systems do not fit each other, you put something between them that translates. When a dependency causes problems, you introduce an interface that hides it. When behavior needs to vary, you add a dispatch layer that selects the right implementation. Each of these is a genuine solution to a genuine problem, and the engineer who reaches for indirection is not being lazy or reckless; quite the opposite, she is applying one of the most productive principles in the discipline's history. Virtual machines, file systems, DNS, HTTP, object-oriented dispatch, dependency injection: all of them are, at root, a layer of indirection that someone inserted between two things that could not otherwise coexist. The pattern has a magnificent track record.
+
+The problem arrives not at the first application but at the fifth, or the fifteenth. Each layer solves the problem that was immediately visible and creates a new set of problems that are not visible until later, when there are now enough layers that no one can remember what the original structure was, and the act of adding the next layer feels — dangerously — just like all the previous acts of adding layers, which worked.
+
+Fred Brooks, in *The Mythical Man-Month*, put it with characteristic precision:
+
+> It is better to have a system omit certain anomalous features and improvements, but to reflect one set of design ideas, than to have one that contains many good but independent and uncoordinated ideas.
+
+Conceptual integrity, he called it. The principle is not parsimony for its own sake — it is the recognition that a system with one coherent design idea can be understood; a system assembled from many individually reasonable ideas, each inserted to solve the problem of the moment, cannot. The ideas do not combine; they accumulate.
+
+### the microservices case
+
+Nowhere is this accumulation more visible, or more instructive, than in the modern enthusiasm for microservices.
+
+The microservices model has genuine virtues. When a system genuinely decomposes into independent domains with well-defined contracts between them, distributing it across services allows each part to be scaled, deployed, and reasoned about in isolation. This is not nothing. The architecture earns its complexity when the decomposition reflects real independence in the problem domain.
+
+What happens in practice, with some frequency, is different. A team encounters a structural problem in their application — a tightly coupled module that is difficult to change, a shared database that has become a bottleneck, a piece of logic that was placed in the wrong layer early in the project's life. The correct response is to address the structural problem directly, which requires understanding it, which is difficult and unglamorous. The available response — the path that *feels* like engineering, that generates a satisfying pull request, that comes with its own ticket and its own sprint — is to introduce a new service that handles the problematic logic in isolation, behind an API.
+
+The API is a level of indirection. It solves the immediate visibility problem: the bad coupling is now hidden behind a service boundary, and the team can resume forward motion. What it does not do is fix the underlying structure; it encapsulates it. The structural debt is still present, now thoroughly wrapped in network calls, serialization contracts, deployment pipelines, health checks, distributed tracing, and the operational overhead of a thing that can fail independently at 3 a.m. You have added Henney's problem on top of Wheeler's solution.
+
+This compounds. The new service itself has rough edges; in time, another service is introduced to manage the interactions between the first two. The container orchestration layer grows to accommodate the expanding topology. A service mesh is introduced to handle the cross-cutting concerns the services have generated. Each addition is defensible in isolation. The aggregate is a distributed monolith: all the coupling of a single application with all the operational complexity of a distributed system, which is to say all the disadvantages of each and the advantages of neither.
 
 There is an line from the world of aircraft design by Antoine de Saint-Exupéry — a writer and pilot, from his 1939 book *Terre des hommes*:
 
 > It seems that perfection is attained not when there is nothing left to add, but when there is nothing left to take away.
 
-Saint-Exupéry was talking about airplanes, which is to say he was talking about machines that kill you if they are poorly designed. Software does not usually kill anyone (though it has, and the instances are instructive), but the principle transfers with uncomfortable precision. The perfect system is not the one with the most features or the cleverest abstractions; it is the one from which you can remove nothing without breaking it.
+The engineers who understood this built aircraft that flew; the ones who didn't built aircraft that didn't. Having crashed his airplane in the Sahara and nearly dying of dehydration gave Saint-Exupéry
 
-Contrariwise, there is a maxim from computer science, attributed to David Wheeler of Cambridge, which states:
 
-> All problems in computer science can be solved by another level of indirection.
+### the zen of it
 
-This is true, in the same way that it is true that all problems of personal finance can be solved by acquiring more money. The statement is technically correct and practically useless because Wheeler himself — or possibly Kevin Henney, the provenance is murky — appended the necessary corollary: "except for the problem of too many levels of indirection." And too many levels of indirection is, in my experience, the single most common disease of software that has been worked on by more than one person for more than one year.
-
-So: two maxims, pointing in opposite directions, both true. This is the tension you will live inside for your entire career.
-
-### the zen of the thing
-
-In 1999, Tim Peters distilled the design philosophy of the Python programming language into nineteen aphorisms (with a twentieth left deliberately blank, which is itself a statement). You can summon them at any Python prompt by typing `import this`, which is a lovely bit of self-reference. Among them:
+Tim Peters, in 1999, distilled the Python design philosophy into nineteen aphorisms in PEP-20 _The Zen of Python_, among them:
 
 > Simple is better than complex.
 > Complex is better than complicated.
-> Flat is better than nested.
 
-Note the structure. Peters does not say "simple is good" — that would be a bumper sticker. He says simple is *better than* complex, which implies that complex is sometimes necessary but that you should prefer the simpler alternative when one exists. And then he immediately concedes that complex is better than complicated, which is to say: if the problem genuinely requires complexity, own it cleanly rather than hiding it behind a tangle of indirections that make the system *complicated* without making it any less *complex*. The distinction matters. A watch is complex; a watch with a third hand that points to a second dial that encodes the time in Roman numerals viewed through a magnifying glass is complicated.
+The structure is doing real work. Simple is *better than* complex — not "simple is ideal" or "complexity is always wrong", but a preference when alternatives exist. Complex is better than *complicated*: if the problem genuinely requires complexity, own it directly rather than hiding it behind a tangle of layers that make the system complicated without reducing its complexity. The distinction, once you have internalized it, is a reliable diagnostic: a service topology that is complex because the business domain is complex is doing necessary work; one that is complicated because it was assembled from successive patches of indirection to avoid confronting the domain structure is not.
 
-There is also this:
 
-> If the implementation is hard to explain, it's a bad idea.
-> If the implementation is easy to explain, it may be a good idea.
+### the discipline
 
-Note the asymmetry. Hard to explain is *certainly* bad. Easy to explain is only *possibly* good. Peters is generous to the simple and skeptical of the clever, which is the correct default posture for someone who has to maintain the thing next year.
+The discipline being described here is not one of abstinence from indirection. It is one of honesty about cost. Every level of indirection you add is a tax levied on everyone who subsequently has to understand the system; it is a potential failure point; it is a contract that must be maintained as the pieces on either side of it evolve. The tax is sometimes worth paying. The point is to pay it consciously, having asked whether the problem it solves is actually the problem you have, and whether there is a structural solution that eliminates the need for the layer rather than routing around it.
 
-### the disease and its symptoms
+When you reach for the new service, the new abstraction, the new interface — ask not whether it solves the current problem. It will. Ask whether you are solving a structural problem or deferring it; and ask whether the person who inherits your architecture, three years hence, will thank you for the additional layer or curse you for the unnecessary one. The answer shapes which kind of engineer you are.
 
-I want to describe the failure mode precisely because I have watched it happen to smart people — indeed it happens *preferentially* to smart people, which is part of what makes it so insidious.
-
-A developer encounters a problem. The problem has some inherent complexity; perhaps it involves coordinating two systems that were designed independently, or handling a data format that is almost-but-not-quite what was expected. The developer, being skilled, recognizes the complexity and — here is where the wheels come off — decides to build an abstraction that will handle not just this problem but all similar problems that might conceivably arise. A factory. An adapter pattern. A plugin architecture. A domain-specific language. The developer is not being lazy; quite the opposite, they are being industrious in exactly the wrong direction.
-
-What they have done is trade a small, concrete problem for a large, abstract one. The original problem was "these two date formats don't match". The new problem is "design and maintain a general-purpose data transformation framework". The first problem can be solved in an afternoon and explained over lunch; the second is a career.
-
-I have a heuristic that I'll offer you with the caveat that heuristics are approximations and not laws: if you are building an abstraction because the *current* code requires it, you are probably doing the right thing; if you are building it because *future* code might require it, you are almost certainly doing the wrong thing. The future is a notoriously unreliable collaborator. It rarely brings the problems you anticipated and invariably brings ones you didn't. The abstraction you built for the imagined future becomes a constraint on the actual one, and three years hence someone will stare at your factory-of-factories and write a two-word code review.
-
-### what removal looks like in practice
-
-So if the discipline is removal rather than addition, what does that look like when you sit down to write code?
-
-It looks like writing the simplest thing that could possibly work and then — this is the part most people skip — *leaving it that way* until demonstrated inadequacy forces a change. It looks like deleting code that isn't being called and not feeling guilty about it. It looks like choosing a flat data structure over a nested one even when the nested one is more "theoretically correct" because flat structures are easier to inspect, easier to debug, and easier to explain to the person who inherits your work.
-
-It also looks like reading your own code a week later and being mildly embarrassed by something you wrote and then asking: is the embarrassment because the code is wrong, or because it is insufficiently clever? If the latter, leave it alone. Insufficient cleverness is not a defect. Excessive cleverness is.
-
-There is a reason that experienced developers delete more code than they write. Software grows by accretion like a coral reef; the living parts are thin and on the surface and the bulk of the mass is dead structure that once served a purpose. Unlike coral, though, dead code has a cost: it must be compiled, navigated, understood (or misunderstood), and maintained. The most productive thing you can do on many days is remove something and watch nothing break.
-
-### a confession
-
-I should tell you that I have built the factory-of-factories. More than once. I have written the abstract base class hierarchy that anticipated seventeen use cases of which two materialized and neither fit the abstraction. I have added the layer of indirection that solved the immediate problem and created three new ones. I know the temptation intimately because I have yielded to it, and I am telling you about it in the same spirit that a man who has touched the hot stove might mention to you that the stove is hot.
-
-Saint-Exupéry vanished over the sea at forty-four, and we found the wreckage of his plane sixty years later. We never found the pilot. Whatever else he was, he was a man who understood that the machine must be stripped to its essentials because your life depends on it. Our stakes are lower but the principle is the same: every unnecessary abstraction is a place where understanding goes to die, and software that cannot be understood cannot be trusted and should not be deployed.
-
-So the next time you reach for a new class, a new layer, a new pattern — ask yourself: is this a thing I am adding, or a thing I could remove? The answer will occasionally be "add". But the question is always worth asking, and the courage is in the removal.
+Henney's corollary is not a footnote to Wheeler. It is the whole point.
