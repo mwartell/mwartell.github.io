@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Productivity on mwartell maladies</title><link>https://mwartell.github.io/tags/productivity/</link><description>Recent content in Productivity on mwartell maladies</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 21 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://mwartell.github.io/tags/productivity/index.xml" rel="self" type="application/rss+xml"/><item><title>a clear shortcut</title><link>https://mwartell.github.io/posts/a-clear-shortcut/</link><pubDate>Tue, 21 Sep 2021 00:00:00 +0000</pubDate><guid>https://mwartell.github.io/posts/a-clear-shortcut/</guid><description>&lt;p&gt;When sharing terminal screens in video conferencing, I often see
+people typing&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;clear
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;in the shell to clear the screen. There is a better way.&lt;/p&gt;
+&lt;p&gt;Since as long as I can remember, possibly dating back to the
+advent of GNU Bash and its &lt;a href="https://en.wikipedia.org/wiki/GNU_Readline"&gt;readline&lt;/a&gt; line editor, Ctrl-L
+has been present to clear the screen. To use it, press&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Ctrl-L
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The historically minded will remember that Ctrl-L is the ␌
+ASCII form-feed character that would eject a page when sent
+to a Teletype.&lt;/p&gt;</description></item></channel></rss>
