@@ -41,13 +41,15 @@ What happens in practice, with some frequency, is different. A team encounters a
 
 The API is a level of indirection. It solves the immediate visibility problem: the bad coupling is now hidden behind a service boundary, and the team can resume forward motion. What it does not do is fix the underlying structure; it encapsulates it. The structural debt is still present, now thoroughly wrapped in network calls, serialization contracts, deployment pipelines, health checks, distributed tracing, and the operational overhead of a thing that can fail independently at 3 a.m. You have added Henney's problem on top of Wheeler's solution.
 
+Robert Pirsig, in *Zen and the Art of Motorcycle Maintenance*, identified this as a specific variety of what he called a gumption trap — an obstacle that quietly drains the motivation and attention necessary to do a job properly. "Impatience," he wrote, "is close to boredom but has a 'muscle tension' quality to it. You want to rush through the job faster than it should be done... If you're going to repair a machine, an attitude of impatience will guarantee that the machine won't be repaired properly." The microservices patch is impatience made architectural. The engineer wants to resume forward motion; the new service supplies the sensation of forward motion — a green pipeline, a closed ticket, a sprint velocity that didn't slip — and so the structural problem, still unexamined, graduates from a local difficulty into a distributed one. The additional operational surface area makes the underlying coupling harder, not easier, to see. You have not escaped the stuckness; you have buried it, and paradoxically made yourself more thoroughly stuck.
+
 This compounds. The new service itself has rough edges; in time, another service is introduced to manage the interactions between the first two. The container orchestration layer grows to accommodate the expanding topology. A service mesh is introduced to handle the cross-cutting concerns the services have generated. Each addition is defensible in isolation. The aggregate is a distributed monolith: all the coupling of a single application with all the operational complexity of a distributed system, which is to say all the disadvantages of each and the advantages of neither.
 
 There is an line from the world of aircraft design by Antoine de Saint-Exupéry — a writer and pilot, from his 1939 book *Terre des hommes*:
 
 > It seems that perfection is attained not when there is nothing left to add, but when there is nothing left to take away.
 
-The engineers who understood this built aircraft that flew; the ones who didn't built aircraft that didn't. Having crashed his airplane in the Sahara and nearly dying of dehydration gave Saint-Exupéry
+Having crashed his airplane in the Sahara and nearly dying of dehydration gave Saint-Exupéry ample time to contemplate the dire consequences of design on his life.
 
 
 ### the zen of it

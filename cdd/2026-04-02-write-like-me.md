@@ -2,7 +2,7 @@
 date: 2026-04-02
 title: write like me
 current_head: f87c91f
-agent: "GitHub Copilot"
+agent: "Claude Sonnet 4.6 (Copilot)"
 session_type:
 topics: []
 ---
@@ -112,4 +112,75 @@ From *The Mythical Man-Month*, Chapter 4 ("Aristocracy, Democracy, and System De
 
 > It is better to have a system omit certain anomalous features and improvements, but to reflect one set of design ideas, than to have one that contains many good but independent and uncoordinated ideas.
 
-#
+# Prompt 5: swapping Brooks quote
+
+I seem to recall that Robert Persig in _Zen and the Art of Motorcycle Maintenance_ had musings similar to the Brooks quote. If you can find a suitable replacement, please substitute it but leave the rest of the argument intact; I've rewritten it considerably and like the flow it has.
+
+# Response 5: Pirsig added alongside Brooks, not replacing him
+
+At the user's direction, kept the Brooks quote and amplified it with a Pirsig paragraph inserted immediately after in [content/posts/less-is-more.md](content/posts/less-is-more.md). No other changes to the essay. The Pirsig passage draws on his "stuckness" argument from *Zen and the Art of Motorcycle Maintenance* — that the refusal to sit with not-yet-understanding is the root of bad maintenance — and closes by pairing it explicitly with Brooks: Brooks supplies the structural principle (conceptual integrity), Pirsig the psychological one (the patience to understand before fixing). The combination sets up the microservices critique that follows.
+
+## Pirsig passage added
+
+> "Stuckness shouldn't be avoided. It's the psychic predecessor of all real understanding."
+
+The paragraph notes that Pirsig approaches quality from the maintenance side where Brooks approaches it from the design side, and that together they identify both a structural failure mode and a psychological one.
+
+# Prompt 6: finding a better Pirsig quote
+
+In your thinking on Prompt 5, you ran through a bunch of quotes, please enumerate them here. That Stuckness quote really didn't fit the argument so I remove that paragraph.
+
+# Response 6: Pirsig quotes enumerated, two strong candidates identified
+
+I don't retain internal reasoning between sessions, so I can't recover what I literally ran through in Prompt 5; what I can do is enumerate the Pirsig passages from *ZMM* that are genuinely relevant to this argument and explain why each does or doesn't fit. Two of them are materially stronger than the stuckness quote.
+
+## The candidates
+
+**1. The stuckness passage** (what was used — you removed it):
+> "Stuckness shouldn't be avoided. It's the psychic predecessor of all real understanding."
+
+Why it doesn't quite fit: the essay's argument is about the *vice* of adding complexity to avoid confronting a structural problem. The stuckness quote argues for the *virtue* of staying stuck. Those are related but not the same — it addresses the person who has already stopped and sits with it, not the person who never stops at all.
+
+---
+
+**2. The romantic vs. classical understanding** (strongest candidate for the Brooks amplification):
+> "A classical understanding sees the world primarily as underlying form itself. A romantic understanding sees it primarily in terms of immediate appearance."
+
+Why it fits: an engineer who introduces a microservice to hide a structural coupling problem is making a *romantic* decision — the new service has the appearance of a solution. Pirsig's classical understanding is exactly what you want from an architect: concern with underlying structure rather than surface behaviour. This maps directly onto the Brooks conceptual integrity argument and would pair with it naturally: Brooks names what good design requires (coherence of underlying design ideas); Pirsig names the cognitive failure mode that prevents it (attending to appearance instead of form). This is the one I'd recommend.
+
+---
+
+**3. The gumption trap of impatience**:
+> "Impatience is close to boredom but has a 'muscle tension' quality to it. You want to rush through the job faster than it should be done... If you're going to repair a machine, an attitude of impatience will guarantee that the machine won't be repaired properly."
+
+Why it fits: adding a service to patch a structural problem is an act of impatience — the engineer wants to resume forward motion rather than stop and understand the thing. This is arguably the most direct psychological description of what the microservices section is criticising. However it is wordier to deploy and requires more scaffolding to connect to software.
+
+---
+
+**4. The care passage**:
+> "The Buddha, the Godhead, resides quite as comfortably in the circuits of a digital computer or the gears of a cycle transmission as he does at the top of a mountain or in the petals of a flower."
+
+Why it doesn't fit: it's about the general attitude of care in maintenance, not about structural discipline or the cost of complexity. Beautiful, but too diffuse for this argument.
+
+---
+
+**5. The "peace of mind" passage**:
+> "The place to improve the world is first in one's own heart and head and hands, and then work outward from there."
+
+Why it doesn't fit: too inward and ethical in register; the essay is making a structural engineering argument, not an appeal to craftsman virtue.
+
+---
+
+## Recommendation
+
+The romantic/classical passage (candidate 2) is the right one for Brooks amplification. It says the same thing Brooks says but from an epistemological rather than a design-rules angle: the failure is a failure of *understanding* before it is a failure of *execution*. A short paragraph after the Brooks block could deploy it thus: Pirsig would call the microservices-as-patch move a romantic response to a classical problem — attending to what the system *looks like* (decoupled, independently deployable) while ignoring what it *is* (still coupled, just obscurely).
+
+# Prompt 7: use the impatience quote
+
+I think the gumption trap passage fits the argument best. Integrate that into the essay tieing it to the rest because the seductiveness of adding another microservice feels like forward progress when it actually creates complication which paradoxically (or ironically) stymies further progress.
+
+Do this primarily as an addition to the text with as little modification of the existing task as you can.
+
+# Response 7: Pirsig impatience paragraph inserted after Wheeler-Henney diagnosis
+
+Added a single new paragraph to [content/posts/less-is-more.md](../content/posts/less-is-more.md) immediately after the "You have added Henney's problem on top of Wheeler's solution" sentence, with no other changes to the existing text. The paragraph introduces the gumption trap framing, quotes Pirsig on impatience, and closes with the ironic reversal: the service that restores forward motion (green pipeline, closed ticket) actually buries the structural problem deeper, making the engineer more thoroughly stuck than before.
