@@ -74,7 +74,7 @@ the experience with opinions.&lt;/p&gt;</description></item><item><title>annotat
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;---
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;aside class="annotation"&gt;
 &lt;span class="annotation-label"&gt;frontmatter: anchoring the session&lt;/span&gt;
-&lt;code&gt;current_head&lt;/code&gt; records the exact git commit the agent was working from, making the session reproducible. &lt;code&gt;instructions&lt;/code&gt; delegates response-formatting rules to a shared file, keeping boilerplate out of the CDD itself. Together these two fields answer: "what was the agent looking at, and what were the rules of engagement?"
+&lt;code&gt;current_head&lt;/code&gt; records the exact git commit the agent was working from, making the session reproducible. &lt;code&gt;session_type&lt;/code&gt; categorizes the work at a glance. Together these fields answer: "what was the agent looking at, and what kind of work was this?" (Earlier CDDs used an &lt;code&gt;instructions&lt;/code&gt; field pointing to a shared formatting file; that role is now handled by the installed skill itself.)
 &lt;/aside&gt;
 &lt;h3 id="prompt-1-understanding-the-issue"&gt;Prompt 1: understanding the issue&lt;/h3&gt;
 &lt;p&gt;While creating and testing ogma.ingest.backwards we found that there were surprising mismatches between ogma.ingest.cip_models and schema/cip_schema.yaml&lt;/p&gt;</description></item></channel></rss>
