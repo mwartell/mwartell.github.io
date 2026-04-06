@@ -1,7 +1,6 @@
 ---
 name: cdd
 description: 'Create or satisfy a Collaborative Development Document (CDD). Use for: new CDD, start session, satisfy prompt, continue CDD work. Usage: /cdd <title> to create a new CDD; /cdd <N> to satisfy Prompt N in the attached CDD.'
-tools: [read, edit, search, execute, todo]
 ---
 
 
